@@ -4,7 +4,7 @@ import java.awt.Color;
 
 import pecose.billos.display.Window;
 
-public abstract class Shape{
+public abstract class Shape extends Shapes{
 	protected int[] pixels;
 	protected int width, height;
 	
@@ -12,11 +12,9 @@ public abstract class Shape{
 	public int getHeight(){ return height; }
 	public int[] getPixels(){ return pixels; }
 	
-	protected int getRelative(double x){ return (int)(Window.window.get(0).width * x )/100; }
-	
 	public Shape(int width, int height){
-		this.width = getRelative(width);
-		this.height = getRelative(height);
+		this.width = Window.getRelative(width);
+		this.height = Window.getRelative(height);
 		this.pixels = new int[this.width*this.height];
 	}
 	

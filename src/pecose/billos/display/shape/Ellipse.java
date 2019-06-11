@@ -2,6 +2,8 @@ package pecose.billos.display.shape;
 
 import java.awt.Color;
 
+import pecose.billos.display.Window;
+
 public class Ellipse extends Shape{
 	
 	private int widthR, heightR, ratio;
@@ -18,7 +20,7 @@ public class Ellipse extends Shape{
 	
 	public Ellipse(int width, int height, Color color, Color color2, double dif){
 		super(width, height);
-		construct(color, color2, getRelative(dif)/2);
+		construct(color, color2, Window.getRelative(dif)/2);
 	}
 	
 	@Override

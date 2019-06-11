@@ -13,9 +13,6 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 public class Listener implements KeyListener, MouseListener, MouseWheelListener, MouseMotionListener, WindowListener, ComponentListener{
-	
-	public Window window;
-	public Listener(Window window) { this.window = window; }
 
 	@Override
 	public void keyPressed(KeyEvent e){ Starter.pecEngine.Keyboard(e, null, null); }
@@ -102,14 +99,14 @@ public class Listener implements KeyListener, MouseListener, MouseWheelListener,
 
 	@Override
 	public void componentResized(ComponentEvent e) {
-		this.window.setWidth(e.getComponent().getSize().width);
-		this.window.setHeight(e.getComponent().getSize().height);
+		Window.setWidth(e.getComponent().getSize().width);
+		Window.setHeight(e.getComponent().getSize().height);
 	}
 
 	@Override
 	public void componentMoved(ComponentEvent e) {
-		this.window.setX((int)e.getComponent().getLocationOnScreen().getX());
-		this.window.setY((int)e.getComponent().getLocationOnScreen().getY());
+		Window.setX((int)e.getComponent().getLocationOnScreen().getX());
+		Window.setY((int)e.getComponent().getLocationOnScreen().getY());
 	}
 
 	@Override

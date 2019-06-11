@@ -5,75 +5,66 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferStrategy;
-import java.util.ArrayList;
 
 public class Window extends Frame{
 	
 	private static final long serialVersionUID = 46928638469284L;
-	private BufferStrategy strategy; 
-	public int width = (int) java.awt.Toolkit.getDefaultToolkit().getScreenSize().getWidth();
-	public int height = (int) java.awt.Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-	protected int x = 0;
-	protected int y = 0;
-	private Boolean fullScreen = false;
-	public static ArrayList<Window> window = new ArrayList<>();
+	private static BufferStrategy strategy; 
+	protected static Brush brush;
+	
+	public static int width = (int) java.awt.Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+	public static int height = (int) java.awt.Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+	protected static int x = 0;
+	protected static int y = 0;
+	private static Boolean fullScreen = false;
+	protected static Window window;
 
-   	protected Brush brush;
+	public Window(){ Window.window = this; start(); }
+	public static void setWidth(int width){ Window.width = width; }
+	public static void setHeight(int height){ Window.height = height; }
+	public static void setX(int x){ Window.x = x; }
+	public static void setY(int y){ Window.y = y; }
+	public static long timer(){ return System.currentTimeMillis(); }
 	
-   	public int getWidth(){ return this.width; }
-	public int getHeight(){ return this.height; }
-	public int getX(){ return this.x; }
-	public int getY(){ return this.y; }
-	public void setWidth(int width){ this.width = width; }
-	public void setHeight(int height){ this.height = height; }
-	public void setX(int x){ this.x = x; }
-	public void setY(int y){ this.y = y; }
-	public long timer(){ return System.currentTimeMillis(); }
+	public static int getRelative(double x){ return (int)(Window.window.getWidth() * x )/100; }
 	
-	public void setFullScreen() {
-		this.fullScreen = !fullScreen;
-		this.setScreen();
-		this.repaint();
+	public static void setFullScreen() {
+		Window.fullScreen = !fullScreen;
+		Window.setScreen();
+		Window.window.repaint();
 	}
 	
-	private void setScreen(){
+	private static void setScreen(){
 		if(fullScreen){
-			this.dispose();
-			this.setUndecorated(true);
+			Window.window.dispose();
+			Window.window.setUndecorated(true);
 			GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-			device.setFullScreenWindow(this);
+			device.setFullScreenWindow(Window.window);
 		}else{
-			this.dispose();
-			this.setUndecorated(false);
-			this.setVisible(true);
-			this.setSize(width, height); //a mettre avent setLocationRelativeTo
-			this.setLocationRelativeTo(null); //Centrer la fenetre
+			Window.window.dispose();
+			Window.window.setUndecorated(false);
+			Window.window.setVisible(true);
+			Window.window.setSize(width, height); //a mettre avent setLocationRelativeTo
+			Window.window.setLocationRelativeTo(null); //Centrer la fenetre
 		};
 	}
 	
-	public Window(){ start( this.getWidth(), this.getHeight(), ""); }
-	public Window(int width, int height){ start(width, height, ""); }
-	public Window(int width, int height, String title){ start(width, height, title); }
 	
-	private void start(int width, int height, String title){
-		Window.window.add(this);
-		this.setTitle(title);
-		this.width = width;
-		this.height = height;
-
-		Listener listener = new Listener(this);
+	
+	private void start(){
+		Listener listener = new Listener();
 		this.addWindowListener(listener);
 		this.addMouseListener(listener);
 		this.addMouseWheelListener(listener);
 		this.addMouseMotionListener(listener);
 		this.addKeyListener(listener);
 		this.addComponentListener(listener);
-		
-		Starter.pecEngine.Creation(this);
-		this.setScreen();
+		Window.setScreen();
 		this.setIgnoreRepaint(true);
 		this.createBufferStrategy(2);
-		this.strategy = this.getBufferStrategy(); 
+		Window.strategy = this.getBufferStrategy();
+		Window.brush = new Brush((Graphics2D)(strategy.getDrawGraphics()).create());
+		Starter.pecEngine.Creation(this); 
 		
 		RenderingThread renderingThread = new RenderingThread();
 		renderingThread.start(); 
@@ -83,9 +74,9 @@ public class Window extends Frame{
 		public void run(){
 			while(true){
 				try{
-					brush = new Brush((Graphics2D)(strategy.getDrawGraphics()).create());
+					Window.brush = new Brush((Graphics2D)(strategy.getDrawGraphics()).create());
 					Starter.pecEngine.Display(brush);
-					strategy.show();
+					Window.strategy.show();
 					sleep(30);
 				}catch(Exception e){} 
 			}
