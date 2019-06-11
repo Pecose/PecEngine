@@ -27,11 +27,11 @@ public class Main implements PecEngine{
 
 	@Override
 	public void Creation(Window window) {
+		window.setSize(100, 100);
 		this.window = window;
 		this.mouse = new Mouse(window);
-		System.out.println(System.currentTimeMillis());
+		
 		ellipse = new Ellipse(width, height, Color.red, new Color(255, 0,0,0), 80);
-		System.out.println(System.currentTimeMillis());
 	}
 
 	@Override

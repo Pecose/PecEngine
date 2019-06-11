@@ -74,7 +74,7 @@ public class Window extends Frame{
 		this.setIgnoreRepaint(true);
 		this.createBufferStrategy(2);
 		this.strategy = this.getBufferStrategy(); 
-		this.brush = new Brush((Graphics2D)(strategy.getDrawGraphics()).create());
+		
 		RenderingThread renderingThread = new RenderingThread();
 		renderingThread.start(); 
 	}
@@ -83,10 +83,11 @@ public class Window extends Frame{
 		public void run(){
 			while(true){
 				try{
+					brush = new Brush((Graphics2D)(strategy.getDrawGraphics()).create());
 					Starter.pecEngine.Display(brush);
 					strategy.show();
-					sleep(30);}
-				catch(Exception e){} 
+					sleep(30);
+				}catch(Exception e){} 
 			}
 		}
 	}
