@@ -19,27 +19,28 @@ public class Main implements PecEngine{
 	
 	public Window window;
 	public Mouse mouse;
-	public Ellipse ellipse;
-	int width = 100;
-	int height = 100;
+	public Ellipse ellipseA;
+	public Ellipse ellipseB;
+	int width = 10;
+	int height = 10;
 	
 	public static void main(String[] arg){ Starter.start(new Main()); }
 
 	@Override
 	public void Creation(Window window) {
-		window.setSize(700, 700);
+//		window.setSize(700, 700);
 		this.window = window;
 		this.mouse = new Mouse(window);
 		
-//		ellipse = new Ellipse(width, height, Color.red, new Color(255, 0,0,0), 80);
-//		ellipse = new Ellipse(width, height, Color.red, Color.red, 100);
-		ellipse = new Ellipse(width, height, Color.red);
+		ellipseA = new Ellipse(width, height, Color.red, new Color(255, 0,0,0), 100);
+		ellipseB = new Ellipse(width, height, Color.red, new Color(255, 0,0,0), 100);
 	}
 
 	@Override
 	public void Display(Brush brush) {
 		brush.reset();
-		brush.drawShape(ellipse, this.mouse.getPosition());
+		brush.drawShape(ellipseA, new Position(300, 350, window).getPoint2D());
+		brush.drawShape(ellipseB, new Position(950, 350, window).getPoint2D());
 
 	}
 	
@@ -58,7 +59,7 @@ public class Main implements PecEngine{
 			}else{
 				return;
 			}
-			ellipse = new Ellipse(width, height, Color.red, new Color(255, 0,0,0));
+			ellipseA.reload(width, height);
 		}
 	}
 

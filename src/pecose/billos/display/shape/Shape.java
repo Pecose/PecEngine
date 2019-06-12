@@ -6,19 +6,26 @@ import pecose.billos.display.Window;
 
 public abstract class Shape extends Shapes{
 	protected int[] pixels;
-	protected int width, height;
+	protected int widthM, heightM, ratio;
+	protected Color color1, color2;
+	protected double spread;
 	
-	public int getWidth(){ return width; }
-	public int getHeight(){ return height; }
+	public int getWidth(){ return widthM; }
+	public int getHeight(){ return heightM; }
 	public int[] getPixels(){ return pixels; }
 	
-	public Shape(int width, int height){
-		this.width = Window.getRelative(width);
-		this.height = Window.getRelative(height);
-		this.pixels = new int[this.width*this.height];
+	public Shape(int width, int height, Color color1, Color color2, double spread){
+		this.widthM = Window.getRelative(width);
+		this.heightM = Window.getRelative(height);
+		this.color1 = color1;
+		this.color2 = color2;
+		this.spread = spread;
+		this.pixels = new int[this.widthM*this.heightM];
 	}
 	
-	public abstract void construct(Color color);
-	public abstract void construct(Color color, Color color2);
-	public abstract void construct(Color color, Color color2, double dif);
+	public void reload(int width, int height){
+		construct(Window.getRelative(width), Window.getRelative(height));
+	}
+	public abstract void construct();
+	public abstract void construct(int width, int height);
 }
