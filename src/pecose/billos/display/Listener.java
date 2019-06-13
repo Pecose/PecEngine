@@ -12,6 +12,8 @@ import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
+import pecose.billos.display.shape.Shape;
+
 public class Listener implements KeyListener, MouseListener, MouseWheelListener, MouseMotionListener, WindowListener, ComponentListener{
 
 	@Override
@@ -101,6 +103,7 @@ public class Listener implements KeyListener, MouseListener, MouseWheelListener,
 	public void componentResized(ComponentEvent e) {
 		Window.setWidth(e.getComponent().getSize().width);
 		Window.setHeight(e.getComponent().getSize().height);
+		for(Shape shape : Shape.list){ shape.reload(); }
 	}
 
 	@Override

@@ -75,6 +75,7 @@ public class Window extends Frame{
 			while(true){
 				try{
 					Window.brush = new Brush((Graphics2D)(strategy.getDrawGraphics()).create());
+					brush.reset();
 					Starter.pecEngine.Display(brush);
 					Window.strategy.show();
 					sleep(30);

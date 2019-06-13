@@ -48,11 +48,13 @@ public class Ellipse extends Shape{
 //	}
 	@Override
 	public void construct() {
-		construct(this.widthM, this.heightM);
+		construct((int)this.widthM, (int)this.heightM);
 	}
 	
 	@Override
-	public void construct(int width, int height) {
+	public void construct(int www, int hhh) {
+		int width = Window.getRelative(www);
+		int height = Window.getRelative(hhh);
 		int[][] pixelsBuffer = new int[width][height];
 		int widthR = width / 2;
 		int heightR = height / 2;
@@ -102,8 +104,8 @@ public class Ellipse extends Shape{
 			}
 		}
 		this.pixels = tempoPixels;
-		this.widthM = width;
-		this.heightM = height;
+		this.widthM = www;
+		this.heightM = hhh;
 	}
 	
 	private int calculeColor(double x, int widthR){

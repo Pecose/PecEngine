@@ -32,15 +32,15 @@ public class Main implements PecEngine{
 		this.window = window;
 		this.mouse = new Mouse(window);
 		
-		ellipseA = new Ellipse(width, height, Color.red, new Color(255, 0,0,0), 100);
+		ellipseA = new Ellipse(width, height, Color.red, new Color(255, 0,0,0), 2);
 		ellipseB = new Ellipse(width, height, Color.red, new Color(255, 0,0,0), 100);
 	}
 
 	@Override
 	public void Display(Brush brush) {
-		brush.reset();
-		brush.drawShape(ellipseA, new Position(300, 350, window).getPoint2D());
-		brush.drawShape(ellipseB, new Position(950, 350, window).getPoint2D());
+		
+		brush.drawShape(ellipseA, 30, 35);
+		brush.drawShape(ellipseB, 50, 35);
 
 	}
 	
