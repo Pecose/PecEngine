@@ -101,9 +101,9 @@ public class Listener implements KeyListener, MouseListener, MouseWheelListener,
 
 	@Override
 	public void componentResized(ComponentEvent e) {
+		for(Shape shape : Shape.list){ shape.reload(); }
 		Window.setWidth(e.getComponent().getSize().width);
 		Window.setHeight(e.getComponent().getSize().height);
-		for(Shape shape : Shape.list){ shape.reload(); }
 	}
 
 	@Override

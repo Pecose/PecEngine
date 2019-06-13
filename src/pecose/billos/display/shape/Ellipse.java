@@ -48,7 +48,7 @@ public class Ellipse extends Shape{
 //	}
 	@Override
 	public void construct() {
-		construct((int)this.widthM, (int)this.heightM);
+		construct(this.widthM, this.heightM);
 	}
 	
 	@Override

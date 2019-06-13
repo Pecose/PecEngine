@@ -2,6 +2,8 @@ package pecose.billos.display.shape;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import pecose.billos.display.Window;
 
@@ -10,7 +12,7 @@ public abstract class Shape{
 	protected int widthM, heightM, ratio;
 	protected Color color1, color2;
 	protected double spread;
-	public static ArrayList<Shape> list = new ArrayList<Shape>();
+	public static List<Shape> list = Collections.synchronizedList(new ArrayList<Shape>());
 	
 	public int getWidth(){ return Window.getRelative(this.widthM); }
 	public int getHeight(){ return Window.getRelative(this.heightM); }

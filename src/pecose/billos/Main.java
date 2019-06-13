@@ -4,13 +4,10 @@ import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 import pecose.billos.display.Brush;
 import pecose.billos.display.Mouse;
 import pecose.billos.display.PecEngine;
-import pecose.billos.display.Position;
 import pecose.billos.display.Starter;
 import pecose.billos.display.Window;
 import pecose.billos.display.shape.Ellipse;
@@ -56,6 +53,8 @@ public class Main implements PecEngine{
 				width--;
 			}else if(pressed.getKeyCode()==83 && height > 1){
 				height--;
+			}else if(pressed.getKeyCode()==27){
+				window.setFullScreen();
 			}else{
 				return;
 			}

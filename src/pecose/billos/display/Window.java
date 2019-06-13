@@ -28,7 +28,7 @@ public class Window extends Frame{
 	
 	public static int getRelative(double x){ return (int)(Window.window.getWidth() * x )/100; }
 	
-	public static void setFullScreen() {
+	public void setFullScreen() {
 		Window.fullScreen = !fullScreen;
 		Window.setScreen();
 		Window.window.repaint();
@@ -74,7 +74,6 @@ public class Window extends Frame{
 		public void run(){
 			while(true){
 				try{
-					Window.brush = new Brush((Graphics2D)(strategy.getDrawGraphics()).create());
 					brush.reset();
 					Starter.pecEngine.Display(brush);
 					Window.strategy.show();
