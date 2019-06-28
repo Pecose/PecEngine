@@ -11,13 +11,14 @@ import pecose.billos.display.PecEngine;
 import pecose.billos.display.Starter;
 import pecose.billos.display.Window;
 import pecose.billos.display.shape.Ellipse;
+import pecose.billos.display.shape.Rectangle;
 
 public class Main implements PecEngine{
 	
 	public Window window;
-	public Mouse mouse;
 	public Ellipse ellipseA;
 	public Ellipse ellipseB;
+	public Rectangle rec;
 	int width = 10;
 	int height = 10;
 	
@@ -25,19 +26,19 @@ public class Main implements PecEngine{
 
 	@Override
 	public void Creation(Window window) {
-//		window.setSize(700, 700);
 		this.window = window;
-		this.mouse = new Mouse(window);
 		
-		ellipseA = new Ellipse(width, height, Color.red, new Color(255, 0,0,0), 2);
-		ellipseB = new Ellipse(width, height, Color.red, new Color(255, 0,0,0), 100);
+		ellipseA = new Ellipse(width, height, Color.red, 50);
+		ellipseB = new Ellipse(width, height, Color.red, 10);
+		rec = new Rectangle(width, height, Color.green);
 	}
 
 	@Override
-	public void Display(Brush brush) {
+	public void Display(Brush brush, Mouse mouse) {
 		
 		brush.drawShape(ellipseA, 30, 35);
-		brush.drawShape(ellipseB, 50, 35);
+		brush.drawShape(ellipseB, 50, 25);
+		brush.drawShape(rec, mouse.getPosition());
 
 	}
 	

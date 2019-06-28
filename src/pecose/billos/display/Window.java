@@ -75,7 +75,7 @@ public class Window extends Frame{
 			while(true){
 				try{
 					brush.reset();
-					Starter.pecEngine.Display(brush);
+					Starter.pecEngine.Display(brush, new Mouse(window));
 					Window.strategy.show();
 					sleep(30);
 				}catch(Exception e){} 
