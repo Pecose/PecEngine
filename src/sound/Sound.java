@@ -1,47 +1,119 @@
 package sound;
-import java.io.File;
 
-import javax.sound.sampled.AudioFormat;
+import java.io.File;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
+import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
-import javax.sound.sampled.SourceDataLine;
- 
-public class Sound extends Thread{
-				private double vol = 0;
-                static boolean isSet = false;
-                static String fileName;
-               
-        public Sound(String path){ fileName = path; }
-        public void setVolume(double x){ vol = x;}
- 
-        public void run(){
-                SourceDataLine line;
-                AudioInputStream audioInputStream;
-                AudioFormat audioFormat;
-                File file = new File(fileName);
-                        
-                try {
-                    audioInputStream = AudioSystem.getAudioInputStream(file);
-                    audioFormat = audioInputStream.getFormat();
-                    DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
-                    line = (SourceDataLine) AudioSystem.getLine(info);
-                    line.open(audioFormat);
-                    line.start();
-	                if (line.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
-	                	FloatControl volume = (FloatControl)line.getControl(FloatControl.Type.MASTER_GAIN);
-	                        byte bytes[] = new byte[2];
-	                        int bytesRead = 0;
-	                        while ((bytesRead = audioInputStream.read(bytes, 0, bytes.length)) != -1) {
-	                                volume.setValue((float) vol); // de -80 a 6.02
-	                                line.write(bytes, 0, bytesRead);
-	                        }
-	                	line.close();
-	                }
-                }catch (Exception e){ e.printStackTrace(); return; }
-                        
-               
-                
-        }
+
+public class Sound {
+	
+	private Long currentFrame; 
+	private Clip clip; 
+	private String status = ""; 
+	private AudioInputStream audioInputStream; 
+	private String filePath; 
+	private float volume = 1.0f;
+	
+	public void setPath(String filePath){ this.filePath = filePath; }
+
+	public Sound(String filePath){ 
+	    try {
+	    	this.setPath(filePath);
+		    audioInputStream = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile()); 
+		    clip = AudioSystem.getClip(); 
+		    clip.open(audioInputStream);
+		}catch(Exception e){ e.printStackTrace(); } 
+	} 
+
+	public void setVolume(double volume){ 
+		this.volume = (float)volume;
+		this.adjustVolume();
+	}
+	
+	public Sound upVolume(){
+		if(this.volume < 1.0f) this.volume = this.volume + 0.01f;
+		this.adjustVolume();
+		return this;
+	}
+	
+	public Sound downVolume(){
+		if(this.volume > 0.0f) this.volume = this.volume - 0.01f;
+		this.adjustVolume();
+		return this;
+	}
+	
+	private void adjustVolume(){ 
+		FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+		float range = gainControl.getMaximum() - gainControl.getMinimum();
+		float gain = (range * this.volume) + gainControl.getMinimum();
+		gainControl.setValue(gain); 
+	}
+	  
+	public void play(){ 
+		if (status.equals("play")){ this.resetAudioStream(); } 
+		this.adjustVolume();
+	    clip.start(); 
+	    status = "play"; 
+	} 
+	  
+	public void pause(){ 
+	    if (status.equals("paused")){ 
+	        System.out.println("audio is already paused"); 
+	        return; 
+	    } 
+	    this.currentFrame = this.clip.getMicrosecondPosition(); 
+	    clip.stop(); 
+	    status = "paused"; 
+	} 
+	  
+	public void resumeAudio(){ 
+	    if (status.equals("play")){ 
+	        System.out.println("Audio is already "+"being played"); 
+	        return; 
+	    } 
+	    clip.close(); 
+	    resetAudioStream(); 
+	    clip.setMicrosecondPosition(currentFrame); 
+	    this.play(); 
+	} 
+	  
+	public void restart(){ 
+	    clip.stop(); 
+	    clip.close(); 
+	    resetAudioStream(); 
+	    currentFrame = 0L; 
+	    clip.setMicrosecondPosition(0); 
+	    this.play(); 
+	} 
+	  
+	public void stop(){ 
+	    currentFrame = 0L; 
+	    clip.stop(); 
+	    clip.close(); 
+	} 
+	  
+	public void jump(long c){ 
+	    if (c > 0 && c < clip.getMicrosecondLength()){ 
+	        clip.stop(); 
+	        clip.close(); 
+	        resetAudioStream(); 
+	        currentFrame = c; 
+	        clip.setMicrosecondPosition(c); 
+	        this.play(); 
+	    } 
+	} 
+	  
+	public void resetAudioStream(){ 
+		try {
+		    audioInputStream = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile()); 
+		    clip = AudioSystem.getClip(); 
+		    clip.open(audioInputStream); 
+		}catch(Exception e){ e.printStackTrace(); } 
+		
+	} 
+
+	public void loop(){ 
+	    clip.loop(Clip.LOOP_CONTINUOUSLY);
+	} 
 }

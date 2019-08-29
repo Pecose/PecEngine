@@ -1,23 +1,32 @@
 package display;
 
-import java.awt.Frame;
+import java.awt.Canvas;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.image.BufferStrategy;
+import java.awt.Toolkit;
 
-public class Window extends Frame{
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public class Window extends JFrame{
 	
 	private static final long serialVersionUID = 46928638469284L;
-	private static BufferStrategy strategy; 
 	protected static Brush brush;
+	protected static Window window;
+	protected Canvas canvas = new Canvas();
+	protected Listener listener = new Listener();
+	protected Panel panel = new Panel();
 	
-	public static int width = (int) java.awt.Toolkit.getDefaultToolkit().getScreenSize().getWidth();
-	public static int height = (int) java.awt.Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+	
+	public Canvas getCanvas(){ return this.canvas; }
+	public static int width = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+	public static int height = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 	protected static int x = 0;
 	protected static int y = 0;
 	private static Boolean fullScreen = false;
-	protected static Window window;
+	
 
 	public Window(){ Window.window = this; start(); }
 	public static void setWidth(int width){ Window.width = width; }
@@ -27,6 +36,14 @@ public class Window extends Frame{
 	public static long timer(){ return System.currentTimeMillis(); }
 	
 	public static int getRelative(double x){ return (int)(Window.window.getWidth() * x )/100; }
+	
+//	public void setFullScreen(){
+//        this.setTitle("titre");
+//        this.setSize(500,300);
+//        this.setAlwaysOnTop(true);
+//        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//        this.setVisible(true);
+//    }
 	
 	public void setFullScreen() {
 		Window.fullScreen = !fullScreen;
@@ -52,7 +69,8 @@ public class Window extends Frame{
 	
 	
 	private void start(){
-		Listener listener = new Listener();
+		panel.add(canvas);
+		this.add(panel);
 		this.addWindowListener(listener);
 		this.addMouseListener(listener);
 		this.addMouseWheelListener(listener);
@@ -61,25 +79,20 @@ public class Window extends Frame{
 		this.addComponentListener(listener);
 		Window.setScreen();
 		this.setIgnoreRepaint(true);
-		this.createBufferStrategy(2);
-		Window.strategy = this.getBufferStrategy();
-		Window.brush = new Brush((Graphics2D)(strategy.getDrawGraphics()).create());
 		Starter.pecEngine.Creation(this); 
 		
-		RenderingThread renderingThread = new RenderingThread();
-		renderingThread.start(); 
 	}
 	
-	class RenderingThread extends Thread{   
-		public void run(){
-			while(true){
-				try{
-					brush.reset();
-					Starter.pecEngine.Display(brush, new Mouse(window));
-					Window.strategy.show();
-					sleep(30);
-				}catch(Exception e){} 
-			}
+	@SuppressWarnings("serial")
+	class Panel extends JPanel{  
+		@Override
+		protected void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			try{
+				Window.brush = new Brush((Graphics2D)g);
+				Starter.pecEngine.Display(brush, new Mouse(window));
+				repaint();
+			}catch(Exception e){} 
 		}
 	}
 }

@@ -38,16 +38,16 @@ public class Listener implements KeyListener, MouseListener, MouseWheelListener,
 	public void mouseWheelMoved(MouseWheelEvent e){ Starter.pecEngine.Mouse(null, null, null, e); }
 
 	@Override
-	public void mouseMoved(MouseEvent e){ Starter.pecEngine.Screen(e, null, null, null); }
+	public void mouseMoved(MouseEvent e){}
 	
 	@Override
-	public void mouseEntered(MouseEvent e){ Starter.pecEngine.Screen(null, e, null, null); }
+	public void mouseEntered(MouseEvent e){ Starter.pecEngine.Screen(e, null, null); }
 
 	@Override
-	public void mouseExited(MouseEvent e){ Starter.pecEngine.Screen(null, null, e, null); }
+	public void mouseExited(MouseEvent e){ Starter.pecEngine.Screen(null, e, null); }
 	
 	@Override
-	public void mouseDragged(MouseEvent e){ Starter.pecEngine.Screen(null, null, null, e); }
+	public void mouseDragged(MouseEvent e){ Starter.pecEngine.Screen(null, null, e); }
 
 	@Override
 	public void windowClosing(WindowEvent e) { 

@@ -9,5 +9,5 @@ public interface PecEngine{
 	public void Display(Brush brush, Mouse mouse);
 	public void Keyboard(KeyEvent pressed, KeyEvent released, KeyEvent typed);
 	public void Mouse(MouseEvent pressed, MouseEvent released, MouseEvent clicked, MouseWheelEvent wheel);
-	public void Screen(MouseEvent move, MouseEvent entered, MouseEvent exited, MouseEvent dragged);
+	public void Screen(MouseEvent entered, MouseEvent exited, MouseEvent dragged);
 }
