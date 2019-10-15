@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import display.Window;
-
 public abstract class Shape{
 	protected int[] pixels;
 	protected int widthM, heightM, ratio;
@@ -14,8 +12,8 @@ public abstract class Shape{
 	protected double spread;
 	public static List<Shape> list = Collections.synchronizedList(new ArrayList<Shape>());
 	
-	public int getWidth(){ return Window.getRelative(this.widthM); }
-	public int getHeight(){ return Window.getRelative(this.heightM); }
+	public int getWidth(){ return this.widthM; }
+	public int getHeight(){ return this.heightM; }
 	public int[] getPixels(){ return pixels; }
 	
 	public Shape(int width, int height, Color color1, Color color2, double spread){
@@ -24,7 +22,7 @@ public abstract class Shape{
 		this.color1 = color1;
 		this.color2 = color2;
 		this.spread = spread;
-		this.pixels = new int[Window.getRelative(width)*Window.getRelative(height)];
+		this.pixels = new int[width*height];
 		Shape.list.add(this);
 	}
 	

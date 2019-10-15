@@ -2,11 +2,9 @@ package shapes;
 
 import java.awt.Color;
 
-import display.Window;
-
-public class Rectangle extends Shape{
+public class Rectangl extends Shape{
 	
-	public Rectangle(int width, int height, Color color1){
+	public Rectangl(int width, int height, Color color1){
 		super(width, height, color1, null, 1);
 		construct();
 	}
@@ -17,17 +15,15 @@ public class Rectangle extends Shape{
 	}
 	
 	@Override
-	public void construct(int www, int hhh) {
-		int width = Window.getRelative(www);
-		int height = Window.getRelative(hhh);
+	public void construct(int width, int height) {
 		this.pixels = new int[width*height];
 		
 		for(int x = 0; x < height*width; x++){
 			this.pixels[x] = color1.getRGB();
 		}
 		
-		this.widthM = www;
-		this.heightM = hhh;
+		this.widthM = width;
+		this.heightM = height;
 	}
 	
 }

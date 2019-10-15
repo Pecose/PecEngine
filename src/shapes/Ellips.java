@@ -2,16 +2,14 @@ package shapes;
 
 import java.awt.Color;
 
-import display.Window;
-
-public class Ellipse extends Shape{
+public class Ellips extends Shape{
 	
-	public Ellipse(int width, int height, Color color1){
+	public Ellips(int width, int height, Color color1){
 		super(width, height, color1, null, 1);
 		construct();
 	}
 	
-	public Ellipse(int width, int height, Color color1, double spread){
+	public Ellips(int width, int height, Color color1, double spread){
 		super(width, height, color1, null, spread);
 		construct();
 	}
@@ -22,9 +20,7 @@ public class Ellipse extends Shape{
 	}
 	
 	@Override
-	public void construct(int www, int hhh) {
-		int width = Window.getRelative(www);
-		int height = Window.getRelative(hhh);
+	public void construct(int width, int height) {
 		int[][] pixelsBuffer = new int[width][height];
 		int widthR = width / 2;
 		int heightR = height / 2;
@@ -74,8 +70,8 @@ public class Ellipse extends Shape{
 			}
 		}
 		this.pixels = tempoPixels;
-		this.widthM = www;
-		this.heightM = hhh;
+		this.widthM = width;
+		this.heightM = height;
 	}
 	
 	private int calculeColor(double x, int widthR){

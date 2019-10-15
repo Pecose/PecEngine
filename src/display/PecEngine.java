@@ -1,13 +1,16 @@
 package display;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelListener;
+import java.awt.event.WindowListener;
 
-public interface PecEngine{
+public interface PecEngine extends KeyListener, MouseListener, MouseWheelListener, MouseMotionListener, WindowListener, ComponentListener{
+	
+	public static void start(PecEngine pecEngine){ new Panel(pecEngine); }
+	
 	public void Creation(Window window);
 	public void Display(Brush brush, Mouse mouse);
-	public void Keyboard(KeyEvent pressed, KeyEvent released, KeyEvent typed);
-	public void Mouse(MouseEvent pressed, MouseEvent released, MouseEvent clicked, MouseWheelEvent wheel);
-	public void Screen(MouseEvent entered, MouseEvent exited, MouseEvent dragged);
 }
