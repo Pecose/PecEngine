@@ -11,6 +11,6 @@ public interface PecEngine extends KeyListener, MouseListener, MouseWheelListene
 	
 	public static void start(PecEngine pecEngine){ new Panel(pecEngine); }
 	
-	public void Creation(Window window);
-	public void Display(Brush brush, Mouse mouse);
+	public void creation(Window window);
+	public void display(Brush brush, Mouse mouse);
 }

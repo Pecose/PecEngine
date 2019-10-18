@@ -5,6 +5,7 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
+import image.Image;
 import shapes.Shape;
 
 public class Brush {
@@ -18,6 +19,16 @@ public class Brush {
 	
 	public void drawShape(Shape shape, Point2D position){ this.drawShape(shape, position.getX(), position.getY()); }
 	public void drawShape(Shape shape, double posX, double posY){
+		graphics.drawImage(
+				this.ColorArrayToBufferedImage(shape.getPixels(), shape.getWidth(), shape.getHeight()), 
+				null, 
+				this.window.getRelative(posX) - shape.getWidth() / 2, 
+				this.window.getRelative(posY) - shape.getHeight() / 2
+		);
+	}
+	
+	public void drawImage(Image shape, Point2D position){ this.drawImage(shape, position.getX(), position.getY()); }
+	public void drawImage(Image shape, double posX, double posY){
 		graphics.drawImage(
 				this.ColorArrayToBufferedImage(shape.getPixels(), shape.getWidth(), shape.getHeight()), 
 				null, 

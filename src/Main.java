@@ -9,17 +9,16 @@ import display.Brush;
 import display.Mouse;
 import display.PecEngine;
 import display.Window;
-import shapes.Ellipse;
-import shapes.Radial;
-import shapes.Rectangle;
+import image.Rectangle;
 import sound.Sound;
 
 public class Main implements PecEngine{
 	
 	public Window window;
-	public Radial ellipseA;
-	public Ellipse ellipseB;
+//	public Radial ellipseA;
+//	public Ellipse ellipseB;
 	public Rectangle rec;
+	public Rectangle im;
 	int width = 10;
 	int height = 10;
 
@@ -28,20 +27,23 @@ public class Main implements PecEngine{
 	public static void main(String[] arg){ PecEngine.start(new Main()); }
 
 	@Override
-	public void Creation(Window window) {
+	public void creation(Window window) {
 		this.window = window;
 //		ellipseA = new Radial(width, height, Color.red, Color.gray, 50);
 //		ellipseB = new Ellipse(width, height, Color.red, 2);
-//		rec = new Rectangle(width, height, Color.green);
+		im = new Rectangle(1500, 1500, Color.BLUE);
+		rec = new Rectangle(width, height, Color.green);
 		
 	}
 
 	@Override
-	public void Display(Brush brush, Mouse mouse) {
+	public void display(Brush brush, Mouse mouse) {
 		
 //		brush.drawShape(ellipseA, 30, 35);
 //		brush.drawShape(ellipseB, 50, 25);
-//		brush.drawShape(rec, mouse.getPosition());
+		
+		im.add(rec, mouse.getPosition());
+		brush.drawImage(im, 0, 0);
 
 	}
 	
@@ -69,8 +71,8 @@ public class Main implements PecEngine{
 		}else{
 			return;
 		}
-		ellipseA.reload(width, height);
-		ellipseB.reload(width, height);
+//		ellipseA.reload(width, height);
+//		ellipseB.reload(width, height);
 		
 	}
 
@@ -142,14 +144,12 @@ public class Main implements PecEngine{
 
 	@Override
 	public void windowClosed(WindowEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void windowClosing(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
+		System.exit(0);
 	}
 
 	@Override

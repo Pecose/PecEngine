@@ -70,7 +70,7 @@ public class Window extends JFrame{
 		this.addComponentListener(pecEngine);
 		this.setScreen();
 		this.setIgnoreRepaint(true);
-		this.pecEngine.Creation(this); 
+		this.pecEngine.creation(this); 
 	}
 	
 }
