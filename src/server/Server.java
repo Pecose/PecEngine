@@ -3,7 +3,7 @@ package server;
 import java.io.Serializable;
 import java.net.ServerSocket;
 
-import com.dosse.upnp.UPnP;
+import waifUPNP.UPnP;
 
 public class Server extends Thread{
 	

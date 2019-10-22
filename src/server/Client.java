@@ -6,9 +6,8 @@ import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import com.dosse.upnp.UPnP;
-
 import tools.Serializer;
+import waifUPNP.UPnP;
 
 public class Client extends Thread{
 	private Socket socket;

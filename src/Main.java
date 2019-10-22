@@ -24,7 +24,7 @@ public class Main implements PecEngine{
 
 	Sound plouf = new Sound("son.wav");	
 	
-	public static void main(String[] arg){ PecEngine.start(new Main()); }
+//	public static void main(String[] arg){ PecEngine.start(new Main()); }
 
 	@Override
 	public void creation(Window window) {

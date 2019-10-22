@@ -1,0 +1,10 @@
+INJECTOR:
+- Instancier un objet Injector : 
+	Injector injector  = new Injector("fichier.txt");
+- Dans le fichier, inscrire par ligne le chemin d'une class:
+	MonPackage.MaClass
+- La class doit implementer une interface:
+ 	public class MaClass implements MonInterface{}
+- Pous gérer l'injection, il faut faire:
+	MonInterface monInterface = (MonInterface)injector.get("MonInterface");
+
