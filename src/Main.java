@@ -4,203 +4,188 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.WindowEvent;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import display.Brush;
 import display.Mouse;
 import display.PecEngine;
 import display.Window;
-import image.Rectangle;
-import sound.Sound;
+import server.Client;
+import server.Server;
 
 public class Main implements PecEngine{
 	
-	public Window window;
-//	public Radial ellipseA;
-//	public Ellipse ellipseB;
-	public Rectangle rec;
-	public Rectangle im;
-	int width = 10;
-	int height = 10;
-
-	Sound plouf = new Sound("son.wav");	
+	public Server server;
+	public Client client;
+	public HomeServer homeServer = new HomeServer();
+	public HomeClient homeClient = new HomeClient();
+	public Player player;
+	public HashMap<String, Player> playersMap;
 	
-//	public static void main(String[] arg){ PecEngine.start(new Main()); }
-
-	@Override
-	public void creation(Window window) {
-		this.window = window;
-//		ellipseA = new Radial(width, height, Color.red, Color.gray, 50);
-//		ellipseB = new Ellipse(width, height, Color.red, 2);
-		im = new Rectangle(1500, 1500, Color.BLUE);
-		rec = new Rectangle(width, height, Color.green);
-		
+	public static void main(String[] args){
+		PecEngine.start(new Main());
 	}
 
 	@Override
-	public void display(Brush brush, Mouse mouse) {
-		
-//		brush.drawShape(ellipseA, 30, 35);
-//		brush.drawShape(ellipseB, 50, 25);
-		
-		im.add(rec, mouse.getPosition());
-		brush.drawImage(im, 0, 0);
-
+	public void creation(Window window){
+		player = new Player("Pecose", Color.red, new Point2D.Double(0, 0));
+		homeServer.setMain(this);
 	}
-	
+
 	@Override
-	public void keyPressed(KeyEvent e) {
-//		System.out.println(e.getKeyCode());
-		if(e.getKeyCode()==68){ //D
-			width++;
-		}else if(e.getKeyCode()==90){ //Z
-			height++;
-		}else if(e.getKeyCode()==81 && width > 1){ //Q
-			width--;
-		}else if(e.getKeyCode()==83 && height > 1){ //S
-			height--;
-		}else if(e.getKeyCode()==27){ //Space
-			window.setFullScreen();
-		}else if(e.getKeyCode()==38){ //UP
-			plouf.upVolume();
-		}else if(e.getKeyCode()==37){ //LEFT
-			plouf.stop();
-		}else if(e.getKeyCode()==40){ //DOWN
-			plouf.downVolume();
-		}else if(e.getKeyCode()==39){ //RIGHT
-			plouf.play();
-		}else{
-			return;
+	public void display(Brush brush, Mouse mouse){
+		player.setPosition(mouse.getPosition());
+		if(client != null) {
+			client.send(player);
 		}
-//		ellipseA.reload(width, height);
-//		ellipseB.reload(width, height);
 		
+		for(Entry<String, Player> player : playersMap.entrySet()) {
+			Player p = player.getValue();
+			brush.graphics.setColor(p.getTeam());
+			brush.graphics.fill(new Ellipse2D.Double(p.getPosition().getX(), p.getPosition().getY(), 10, 10));
+		}
+		
+	}
+	
+	@Override
+	public void keyPressed(KeyEvent key){
+		if(key.getKeyChar() == 's') {
+			server = new Server(1813, homeServer);
+			System.out.println("Vous venez de créé un serveur");
+		}else if(key.getKeyChar() == 'c'){
+			client = new Client("10.234.100.23", 1813, "Pecose", homeClient);
+			System.out.println("Vous venez de créé un client");
+		}
 	}
 
 	@Override
-	public void keyReleased(KeyEvent arg0) {
+	public void keyReleased(KeyEvent arg0){
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void keyTyped(KeyEvent arg0) {
+	public void keyTyped(KeyEvent arg0){
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
+	public void mouseClicked(MouseEvent arg0){
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent e) {
+	public void mouseEntered(MouseEvent arg0){
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void mouseExited(MouseEvent e) {
+	public void mouseExited(MouseEvent arg0){
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
+	public void mousePressed(MouseEvent arg0){
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
+	public void mouseReleased(MouseEvent arg0){
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void mouseWheelMoved(MouseWheelEvent e) {
+	public void mouseWheelMoved(MouseWheelEvent arg0){
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent arg0) {
+	public void mouseDragged(MouseEvent arg0){
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void mouseMoved(MouseEvent arg0) {
+	public void mouseMoved(MouseEvent arg0){
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void windowActivated(WindowEvent e) {
+	public void windowActivated(WindowEvent e){
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void windowClosed(WindowEvent e) {
+	public void windowClosed(WindowEvent e){
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void windowClosing(WindowEvent e) {
+	public void windowClosing(WindowEvent e){
 		System.exit(0);
 	}
 
 	@Override
-	public void windowDeactivated(WindowEvent e) {
+	public void windowDeactivated(WindowEvent e){
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void windowDeiconified(WindowEvent e) {
+	public void windowDeiconified(WindowEvent e){
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void windowIconified(WindowEvent e) {
+	public void windowIconified(WindowEvent e){
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void windowOpened(WindowEvent e) {
+	public void windowOpened(WindowEvent e){
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void componentHidden(ComponentEvent arg0) {
+	public void componentHidden(ComponentEvent arg0){
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void componentMoved(ComponentEvent arg0) {
+	public void componentMoved(ComponentEvent arg0){
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void componentResized(ComponentEvent arg0) {
+	public void componentResized(ComponentEvent arg0){
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void componentShown(ComponentEvent arg0) {
+	public void componentShown(ComponentEvent arg0){
 		// TODO Auto-generated method stub
 		
 	}
-
-
 
 	
+
 }
