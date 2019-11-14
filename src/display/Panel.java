@@ -7,16 +7,16 @@ import javax.swing.JPanel;
 
 class Panel extends JPanel{  
 	private static final long serialVersionUID = -696807925661491890L;
-	public Window window;
+	public Frame frame;
 	public Panel(PecEngine pecEngine){
-		this.window = new Window(pecEngine, this);
+		this.frame = new Frame(pecEngine, this);
 	}
 	
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		try{
-			window.pecEngine.display(new Brush((Graphics2D)g, window), new Mouse(window));
+			frame.pecEngine.display(this, (Graphics2D) g);
 			repaint();
 		}catch(Exception e){} 
 	}

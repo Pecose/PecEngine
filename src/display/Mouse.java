@@ -1,14 +1,17 @@
 package display;
 
 import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.geom.Point2D;
+import javax.swing.JFrame;
 
 public class Mouse {
-	private Window window;
-	public Mouse(Window window){ this.window = window; }
 	
-	private double getX(){ return MouseInfo.getPointerInfo().getLocation().x - window.getComponent(0).getX() - window.getX(); };
-	private double getY(){ return MouseInfo.getPointerInfo().getLocation().y - window.getComponent(0).getY() - window.getY(); };
+	private JFrame frame;
+	public Mouse(JFrame frame){ this.frame = frame; }
 	
-	public Point2D getPosition(){ return new Position(getX(), getY(), window).getPoint2D(); } 
+	public int getX(){ return MouseInfo.getPointerInfo().getLocation().x - frame.getComponent(0).getX() - frame.getX(); };
+	public int getY(){ return MouseInfo.getPointerInfo().getLocation().y - frame.getComponent(0).getY() - frame.getY(); };
+	
+	public Point2D getPosition(){ return new Position(getX(), getY(), frame).getPoint2D(); } 
 }
