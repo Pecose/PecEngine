@@ -3,6 +3,7 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.ImageObserver;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -13,7 +14,6 @@ import display.PecEngine;
 public class Main implements PecEngine, MouseMotionListener, MouseListener{
 
 	public static void main(String[] args){ PecEngine.start(new Main()); }
-	private int x = 0, y = 0;
 	private JFrame frame;
 	private Mouse mouse;
 	
@@ -29,14 +29,12 @@ public class Main implements PecEngine, MouseMotionListener, MouseListener{
 	public void display(JPanel p, Graphics2D g){
 		g.fillRect(mouse.getX(), mouse.getY(), 10, 10);
 	}
-
+	
 	@Override
 	public void mouseDragged(MouseEvent e){}
 
 	@Override
 	public void mouseMoved(MouseEvent e){
-//		x = e.getX();
-//		y = e.getY();
 	}
 
 	@Override

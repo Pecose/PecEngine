@@ -1,11 +1,13 @@
 package display;
 
+import java.awt.Dimension;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class Frame extends JFrame{
 	
@@ -49,7 +51,8 @@ public class Frame extends JFrame{
 		}else{
 			this.dispose();
 			this.setUndecorated(false);
-			this.setSize(width, height); //a mettre avent setLocationRelativeTo
+			this.setPreferredSize(new Dimension(width, height)); //a mettre avent setLocationRelativeTo
+			this.pack();
 			this.setLocationRelativeTo(null); //Centrer la fenetre
 			this.setVisible(true);
 		};
@@ -58,8 +61,14 @@ public class Frame extends JFrame{
 	public void start(){
 		this.setContentPane(panel);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		Frame frame = this;
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run(){
+				frame.pecEngine.creation(frame, new Mouse(frame));
+			}
+		});
 		this.setScreen();
-		this.pecEngine.creation(this, new Mouse(this));
 	}
 	
 }

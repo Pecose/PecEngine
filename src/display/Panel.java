@@ -16,7 +16,7 @@ class Panel extends JPanel{
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		try{
-			frame.pecEngine.display(this, (Graphics2D) g);
+			frame.pecEngine.display(this, (Graphics2D) g.create());
 			repaint();
 		}catch(Exception e){} 
 	}
