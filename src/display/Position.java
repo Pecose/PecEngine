@@ -12,8 +12,8 @@ public class Position {
 	public Position(double x, double y, JFrame frame){ this.position(x,y,frame); }
 	
 	private void position(double x, double y, JFrame frame){
-		this.x = (x*100)/((Frame)frame).width;
-		this.y = (y*100)/((Frame)frame).width;
+		this.x = (x*100)/((Frame)frame).getScreenWidth();
+		this.y = (y*100)/((Frame)frame).getScreenWidth();
 	}
 
 }

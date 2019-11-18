@@ -3,22 +3,20 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.image.ImageObserver;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
+import display.Frame;
+import display.Panel;
 import display.Mouse;
 import display.PecEngine;
 
 public class Main implements PecEngine, MouseMotionListener, MouseListener{
 
 	public static void main(String[] args){ PecEngine.start(new Main()); }
-	private JFrame frame;
+	private Frame frame;
 	private Mouse mouse;
 	
 	@Override
-	public void creation(JFrame f, Mouse m){
+	public void creation(Frame f, Mouse m){
 		f.addMouseMotionListener(this);
 		f.addMouseListener(this);
 		this.frame = f;
@@ -26,7 +24,7 @@ public class Main implements PecEngine, MouseMotionListener, MouseListener{
 	}
 
 	@Override
-	public void display(JPanel p, Graphics2D g){
+	public void display(Panel p, Graphics2D g){
 		g.fillRect(mouse.getX(), mouse.getY(), 10, 10);
 	}
 	
@@ -39,7 +37,7 @@ public class Main implements PecEngine, MouseMotionListener, MouseListener{
 
 	@Override
 	public void mouseClicked(MouseEvent e){
-
+		this.frame.setFullScreen();
 	}
 
 	@Override

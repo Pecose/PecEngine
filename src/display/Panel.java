@@ -4,12 +4,20 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
-class Panel extends JPanel{  
+public class Panel extends JPanel{  
 	private static final long serialVersionUID = -696807925661491890L;
 	public Frame frame;
 	public Panel(PecEngine pecEngine){
-		this.frame = new Frame(pecEngine, this);
+		Panel p = this;
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run(){
+				p.frame = new Frame(pecEngine, p);
+			}
+		});
+		
 	}
 	
 	@Override

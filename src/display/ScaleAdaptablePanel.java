@@ -70,7 +70,6 @@ public class ScaleAdaptablePanel extends JPanel {
 		super.paint(g);
 	
 		if ( painter!=null) {
-        
 			Graphics2D g2D = (Graphics2D) g.create();		
 			
 			Insets insets = getInsets();
@@ -79,9 +78,7 @@ public class ScaleAdaptablePanel extends JPanel {
 			if (adaptable) { adapt(g2D); }
 			
 			painter.accept(g2D,this);
-			
 			g2D.dispose();
-		
 		}
 		
 	}
