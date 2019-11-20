@@ -26,6 +26,7 @@ public class Main implements PecEngine, MouseMotionListener, MouseListener{
 	@Override
 	public void display(Panel p, Graphics2D g){
 		g.fillRect(mouse.getX(), mouse.getY(), 10, 10);
+		g.fillRect(100, 100, 10, 10);
 	}
 	
 	@Override

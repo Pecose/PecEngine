@@ -1,9 +1,12 @@
 package display;
 
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Insets;
 import java.awt.Toolkit;
+import java.awt.geom.AffineTransform;
 import java.beans.PropertyChangeEvent;
 
 import javax.swing.JFrame;
@@ -23,8 +26,12 @@ public class Frame extends JFrame{
 	public Frame(PecEngine pecEngine, JPanel panel){ 
 		this.panel = panel;
 		this.pecEngine = pecEngine;
+
 		this.start(); 
 	}
+	
+	
+	
 	public int getScreenWidth(){ return (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth(); }
 	public int getScreenHeight(){ return (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight(); }
 	
@@ -58,7 +65,7 @@ public class Frame extends JFrame{
 	public void goWindowed() {
 		this.dispose();
 		this.setUndecorated(false);
-		this.setPreferredSize(new Dimension(getScreenWidth(), getScreenHeight())); //a mettre avent setLocationRelativeTo
+//		this.setPreferredSize(new Dimension(getScreenWidth(), getScreenHeight())); //a mettre avent setLocationRelativeTo
 		this.pack();
 		this.setLocationRelativeTo(null); //Centrer la fenetre
 		this.setVisible(true);
