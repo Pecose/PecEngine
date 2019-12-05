@@ -1,17 +1,63 @@
 package display;
 
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.awt.geom.Point2D;
-import javax.swing.JFrame;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
-public class Mouse {
+public class Mouse implements MouseMotionListener, MouseWheelListener, MouseListener{
 	
-	private JFrame frame;
-	public Mouse(JFrame frame){ this.frame = frame; }
-	
-	public int getX(){ return MouseInfo.getPointerInfo().getLocation().x - frame.getComponent(0).getX() - frame.getX(); };
-	public int getY(){ return MouseInfo.getPointerInfo().getLocation().y - frame.getComponent(0).getY() - frame.getY(); };
-	
-	public Point2D getPosition(){ return new Position(getX(), getY(), frame).getPoint2D(); } 
+	public Mouse(){
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e){
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e){
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e){
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e){
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e){
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e){
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e){
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e){
+		// TODO Auto-generated method stub
+		
+	}
+
 }
