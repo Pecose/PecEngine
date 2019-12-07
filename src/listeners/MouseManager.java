@@ -1,9 +1,10 @@
-package display;
+package listeners;
 
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.Point;
-import java.awt.event.MouseAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -14,88 +15,52 @@ import java.awt.geom.NoninvertibleTransformException;
 import java.util.Arrays;
 import java.util.function.BiConsumer;
 
-public class MouseEventInterceptor extends MouseAdapter{
+import display.Panel;
+
+public class MouseManager {
 	
 	private Panel panel;
-	public MouseEventInterceptor(Panel panel){
-		this.panel = panel;
-	}
+	public Panel getPanel() { return panel; }
 	
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		propagate(e, panel.getMouseListeners(), MouseListener::mouseClicked);
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		propagate(e, panel.getMouseListeners(), MouseListener::mousePressed);
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		propagate(e, panel.getMouseListeners(), MouseListener::mousePressed);
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		propagate(e, panel.getMouseListeners(), MouseListener::mouseEntered);
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		propagate(e, panel.getMouseListeners(), MouseListener::mouseExited);
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		propagate(e, panel.getMouseMotionListeners(), MouseMotionListener::mouseMoved);
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		propagate(e, panel.getMouseMotionListeners(), MouseMotionListener::mouseDragged);
-	}
-
-	@Override
-	public void mouseWheelMoved(MouseWheelEvent e) {
-		propagate(e, panel.getMouseWheelListeners(), MouseWheelListener::mouseWheelMoved);
-	}
-
-	private void propagate(MouseEvent mouseEvent, MouseListener[] listeners, BiConsumer<MouseListener, MouseEvent> distatcher) {
+	public MouseManager(Panel panel){ this.panel = panel; }
+	
+	protected void propagate(MouseEvent mouseEvent, MouseListener[] listeners, BiConsumer<MouseListener, MouseEvent> distatcher) {
 		Point mousePoint = mouseEvent.getPoint();
 		try {
 			convertMouse(mousePoint); 
 			MouseEvent newEvent = createMouseEvent(mouseEvent, mousePoint);
-			synchronized (panel) {
+			synchronized (getPanel()) {
 				Arrays.stream(listeners).forEach(listener->distatcher.accept(listener,newEvent));
 			}
-		} catch (NoninvertibleTransformException e1) {
-			e1.printStackTrace();
-		}
+		}catch(Exception e){ e.printStackTrace(); }
 	}
-	private void propagate(MouseEvent mouseEvent, MouseMotionListener[] listeners, BiConsumer<MouseMotionListener, MouseEvent> distatcher) {
+	protected void propagate(MouseEvent mouseEvent, MouseMotionListener[] listeners, BiConsumer<MouseMotionListener, MouseEvent> distatcher) {
 		Point mousePoint = mouseEvent.getPoint();
 		try {
 			convertMouse(mousePoint); 
 			MouseEvent newEvent = createMouseEvent(mouseEvent, mousePoint);
-			synchronized (panel) {
+			synchronized (getPanel()) {
 				Arrays.stream(listeners).forEach(listener->distatcher.accept(listener,newEvent));
 			}
-		} catch (NoninvertibleTransformException e1) {
-			e1.printStackTrace();
-		}
+		}catch(Exception e){ e.printStackTrace(); }
 	}
-	private void propagate(MouseWheelEvent mouseEvent, MouseWheelListener[] listeners, BiConsumer<MouseWheelListener, MouseWheelEvent> distatcher) {
+	protected void propagate(MouseWheelEvent mouseEvent, MouseWheelListener[] listeners, BiConsumer<MouseWheelListener, MouseWheelEvent> distatcher) {
 		Point mousePoint = mouseEvent.getPoint();
 		try {
 			convertMouse(mousePoint); 
 			MouseWheelEvent newEvent = createMouseEvent(mouseEvent, mousePoint);
-			synchronized (panel) {
+			synchronized (getPanel()) {
 				Arrays.stream(listeners).forEach(listener->distatcher.accept(listener,newEvent));
 			}
-		} catch (NoninvertibleTransformException e1) {
-			e1.printStackTrace();
-		}
+		}catch(Exception e){ e.printStackTrace(); }
+	}
+	
+	protected void propagate(KeyEvent keyEvent, KeyListener[] listeners, BiConsumer<KeyListener, KeyEvent> distatcher) {
+		try {
+			synchronized (getPanel()) {
+				Arrays.stream(listeners).forEach(listener->distatcher.accept(listener,keyEvent));
+			}
+		}catch(Exception e){ e.printStackTrace(); }
 	}
 
 	private MouseEvent createMouseEvent(MouseEvent e, Point p) {
@@ -106,15 +71,15 @@ public class MouseEventInterceptor extends MouseAdapter{
 	}
 	
 	protected void convertMouse(Point point) throws NoninvertibleTransformException {
-		Insets insets = panel.getInsets();
+		Insets insets = getPanel().getInsets();
 		AffineTransform transform = AffineTransform.getTranslateInstance(insets.left, insets.top);
-		if ( panel.isAdaptable() ) {
-			transform.concatenate(proportionalAffineTransform(panel.getInnerDimension(panel.getDrawsize()), panel.getInnerDimension(panel.getPreferredSize())));
-			if ( panel.isProportional() ) {
-				transform.concatenate(proportionalAffineTransform(panel.getInnerDimension(panel.getDrawsize()), panel.getInnerDimension(panel.getSize())));
+		if ( getPanel().isAdaptable() ) {
+			transform.concatenate(proportionalAffineTransform(getPanel().getInnerDimension(getPanel().getDrawsize()), getPanel().getInnerDimension(getPanel().getPreferredSize())));
+			if ( getPanel().isProportional() ) {
+				transform.concatenate(proportionalAffineTransform(getPanel().getInnerDimension(getPanel().getDrawsize()), getPanel().getInnerDimension(getPanel().getSize())));
 			}
 			else {
-				transform.concatenate(affineTransform(panel.getInnerDimension(panel.getDrawsize()), panel.getInnerDimension(panel.getSize())));
+				transform.concatenate(affineTransform(getPanel().getInnerDimension(getPanel().getDrawsize()), getPanel().getInnerDimension(getPanel().getSize())));
 			}
 		}  
 		transform.inverseTransform(point, point); 
@@ -134,4 +99,5 @@ public class MouseEventInterceptor extends MouseAdapter{
 		}
 		return AffineTransform.getScaleInstance(sx, sx);
 	}
+
 }

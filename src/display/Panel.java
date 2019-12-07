@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
@@ -14,6 +15,19 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.EventListenerList;
+
+import listeners.KeyPressedListener;
+import listeners.KeyReleasedListener;
+import listeners.KeyTypedListener;
+import listeners.Listeners;
+import listeners.MouseClickedListener;
+import listeners.MouseDraggedListener;
+import listeners.MouseEnteredListener;
+import listeners.MouseExitedListener;
+import listeners.MouseMovedListener;
+import listeners.MousePressedListener;
+import listeners.MouseReleasedListener;
+import listeners.MouseWheelMovedListener;
 
 public class Panel extends JPanel{  
 	private static final long serialVersionUID = -696807925661491890L;
@@ -28,10 +42,19 @@ public class Panel extends JPanel{
 	
     /** @param pecEngine Objet créé par l'utilisateur pour définir le code d'affichage */
 	public Panel(PecEngine pecEngine){
-		MouseEventInterceptor mouseEventInterceptor = new MouseEventInterceptor(this);
-		super.addMouseListener(mouseEventInterceptor);
-		super.addMouseMotionListener(mouseEventInterceptor);
-		super.addMouseWheelListener(mouseEventInterceptor);
+		
+		// MouseEventInterceptor a modifier par Listeners--------------------------------------------
+//		MouseEventInterceptor mouseEventInterceptor = new MouseEventInterceptor(this);
+//		super.addMouseListener(mouseEventInterceptor);
+//		super.addMouseMotionListener(mouseEventInterceptor);
+//		super.addMouseWheelListener(mouseEventInterceptor);
+		//-------------------------------------------------------------------------------------------
+		
+		Listeners listeners = new Listeners(this);
+		super.addMouseListener(listeners);
+		super.addMouseMotionListener(listeners);
+		super.addMouseWheelListener(listeners);
+		
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override public void run(){ Panel.this.frame = new Frame(pecEngine, Panel.this); }
 		});
@@ -160,6 +183,55 @@ public class Panel extends JPanel{
 	public synchronized MouseWheelListener[] getMouseWheelListeners() {
 		return eventlisteners.getListeners(MouseWheelListener.class);
 	} 
+	
+	@Override
+	public synchronized KeyListener[] getKeyListeners() {
+		return eventlisteners.getListeners(KeyListener.class);
+	} 
+	
+	public synchronized KeyPressedListener[] getKeyPressedListeners() {
+		return eventlisteners.getListeners(KeyPressedListener.class);
+	} 
+	
+	public synchronized KeyReleasedListener[] getKeyReleasedListeners() {
+		return eventlisteners.getListeners(KeyReleasedListener.class);
+	} 
+	
+	public synchronized KeyTypedListener[] getKeyTypedListeners() {
+		return eventlisteners.getListeners(KeyTypedListener.class);
+	} 
+	
+	public synchronized MouseClickedListener[] getMouseClickedListeners() {
+		return eventlisteners.getListeners(MouseClickedListener.class);
+	} 
+	
+	public synchronized MouseDraggedListener[] getMouseDraggedListeners() {
+		return eventlisteners.getListeners(MouseDraggedListener.class);
+	} 
+	
+	public synchronized MouseEnteredListener[] getMouseEnteredListeners() {
+		return eventlisteners.getListeners(MouseEnteredListener.class);
+	} 
+	
+	public synchronized MouseExitedListener[] getMouseExitedListeners() {
+		return eventlisteners.getListeners(MouseExitedListener.class);
+	} 
+	
+	public synchronized MouseMovedListener[] getMouseMovedListeners() {
+		return eventlisteners.getListeners(MouseMovedListener.class);
+	} 
+	
+	public synchronized MousePressedListener[] getMousePressedListeners() {
+		return eventlisteners.getListeners(MousePressedListener.class);
+	}
+	
+	public synchronized MouseReleasedListener[] getMouseReleasedListeners() {
+		return eventlisteners.getListeners(MouseReleasedListener.class);
+	}
+	
+	public synchronized MouseWheelMovedListener[] getMouseWheelMovedListeners() {
+		return eventlisteners.getListeners(MouseWheelMovedListener.class);
+	}
  
 	//Liste des adders ------------------------------------------------
 	@Override
@@ -180,6 +252,68 @@ public class Panel extends JPanel{
 		eventlisteners.add(MouseMotionListener.class, l);
 	}
  
+	@Override
+	public synchronized void addKeyListener(KeyListener l) {
+		if(l == null) return;
+		eventlisteners.add(KeyListener.class, l);
+	}
+	
+	public synchronized void addKeyPressedListener(KeyPressedListener l) {
+		if(l == null) return;
+		eventlisteners.add(KeyPressedListener.class, l);
+	}
+	
+	public synchronized void addKeyReleasedListener(KeyReleasedListener l) {
+		if(l == null) return;
+		eventlisteners.add(KeyReleasedListener.class, l);
+	}
+	
+	public synchronized void addKeyTypedListener(KeyTypedListener l) {
+		if(l == null) return;
+		eventlisteners.add(KeyTypedListener.class, l);
+	}
+	
+	public synchronized void addMouseClickedListener(MouseClickedListener l) {
+		if(l == null) return;
+		eventlisteners.add(MouseClickedListener.class, l);
+	}
+	
+	public synchronized void addMouseDraggedListener(MouseDraggedListener l) {
+		if(l == null) return;
+		eventlisteners.add(MouseDraggedListener.class, l);
+	}
+	
+	public synchronized void addMouseEnteredListener(MouseEnteredListener l) {
+		if(l == null) return;
+		eventlisteners.add(MouseEnteredListener.class, l);
+	}
+	
+	public synchronized void addMouseExitedListener(MouseExitedListener l) {
+		if(l == null) return;
+		eventlisteners.add(MouseExitedListener.class, l);
+	}
+	
+	public synchronized void addMouseMovedListener(MouseMovedListener l) {
+		if(l == null) return;
+		eventlisteners.add(MouseMovedListener.class, l);
+	}
+	
+	public synchronized void addMousePressedListener(MousePressedListener l) {
+		if(l == null) return;
+		eventlisteners.add(MousePressedListener.class, l);
+	}
+	
+	public synchronized void addMouseReleasedListener(MouseReleasedListener l) {
+		if(l == null) return;
+		eventlisteners.add(MouseReleasedListener.class, l);
+	}
+	
+	public synchronized void addMouseWheelMovedListener(MouseWheelMovedListener l) {
+		if(l == null) return;
+		eventlisteners.add(MouseWheelMovedListener.class, l);
+	}
+	
+	
 	//Liste des removers ------------------------------------------------
 	@Override
 	public synchronized void removeMouseListener(MouseListener l) {
@@ -198,6 +332,68 @@ public class Panel extends JPanel{
 		if(l == null) return;
 		eventlisteners.remove(MouseWheelListener.class, l);
 	}
+	
+	@Override
+	public synchronized void removeKeyListener(KeyListener l) {
+		if(l == null) return;
+		eventlisteners.remove(KeyListener.class, l);
+	}
+	
+	public synchronized void removeKeyPressedListener(KeyPressedListener l) {
+		if(l == null) return;
+		eventlisteners.remove(KeyPressedListener.class, l);
+	}
+	
+	public synchronized void removeKeyReleasedListener(KeyReleasedListener l) {
+		if(l == null) return;
+		eventlisteners.remove(KeyReleasedListener.class, l);
+	}
+	
+	public synchronized void removeKeyTypedListener(KeyTypedListener l) {
+		if(l == null) return;
+		eventlisteners.remove(KeyTypedListener.class, l);
+	}
+	
+	public synchronized void removeMouseClickedListener(MouseClickedListener l) {
+		if(l == null) return;
+		eventlisteners.remove(MouseClickedListener.class, l);
+	}
+	
+	public synchronized void removeMouseDraggedListener(MouseDraggedListener l) {
+		if(l == null) return;
+		eventlisteners.remove(MouseDraggedListener.class, l);
+	}
+	
+	public synchronized void removeMouseEnteredListener(MouseEnteredListener l) {
+		if(l == null) return;
+		eventlisteners.remove(MouseEnteredListener.class, l);
+	}
+	
+	public synchronized void removeMouseExitedListener(MouseExitedListener l) {
+		if(l == null) return;
+		eventlisteners.remove(MouseExitedListener.class, l);
+	}
+	
+	public synchronized void removeMouseMovedListener(MouseMovedListener l) {
+		if(l == null) return;
+		eventlisteners.remove(MouseMovedListener.class, l);
+	}
+	
+	public synchronized void removeMousePressedListener(MousePressedListener l) {
+		if(l == null) return;
+		eventlisteners.remove(MousePressedListener.class, l);
+	}
+	
+	public synchronized void removeMouseReleasedListener(MouseReleasedListener l) {
+		if(l == null) return;
+		eventlisteners.remove(MouseReleasedListener.class, l);
+	}
+	
+	public synchronized void removeMouseWheelMovedListener(MouseWheelMovedListener l) {
+		if(l == null) return;
+		eventlisteners.remove(MouseWheelMovedListener.class, l);
+	}
+	
 	
 }
 

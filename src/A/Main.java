@@ -1,5 +1,7 @@
 package A;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 
@@ -7,7 +9,7 @@ import display.Frame;
 import display.Panel;
 import display.PecEngine;
 
-public class Main implements PecEngine, MouseMotionListener{
+public class Main implements PecEngine, MouseMotionListener, KeyListener{
 
 	public static void main(String[] args){ PecEngine.start(new Main()); }
 	private Frame frame;
@@ -19,7 +21,7 @@ public class Main implements PecEngine, MouseMotionListener{
 		
 		
 		f.addMouseMotionListener(this);
-		
+		f.addKeyListener(this);
 	}
 
 	@Override
@@ -38,6 +40,23 @@ public class Main implements PecEngine, MouseMotionListener{
 	public void mouseMoved(MouseEvent e){
 		x=e.getX();
 		y=e.getY();
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		System.out.println(e.getKeyChar());
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	
