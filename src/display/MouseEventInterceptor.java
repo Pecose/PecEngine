@@ -99,10 +99,10 @@ public class MouseEventInterceptor extends MouseAdapter{
 	}
 
 	private MouseEvent createMouseEvent(MouseEvent e, Point p) {
-		return new MouseEvent(e.getComponent(), e.getID(), e.getWhen(), e.getModifiers(), p.x, p.y, e.getXOnScreen(), e.getYOnScreen(), e.getClickCount(), e.isPopupTrigger(),  e.getButton());
+		return new MouseEvent(e.getComponent(), e.getID(), e.getWhen(), e.getModifiersEx(), p.x, p.y, e.getXOnScreen(), e.getYOnScreen(), e.getClickCount(), e.isPopupTrigger(),  e.getButton());
 	}
 	private MouseWheelEvent createMouseEvent(MouseWheelEvent e, Point p) {
-		return new MouseWheelEvent(e.getComponent(), e.getID(), e.getWhen(), e.getModifiers(), p.x, p.y, e.getXOnScreen(), e.getYOnScreen(), e.getClickCount(), e.isPopupTrigger(),  e.getScrollType(), e.getScrollAmount(), e.getWheelRotation(), e.getPreciseWheelRotation());
+		return new MouseWheelEvent(e.getComponent(), e.getID(), e.getWhen(), e.getModifiersEx(), p.x, p.y, e.getXOnScreen(), e.getYOnScreen(), e.getClickCount(), e.isPopupTrigger(),  e.getScrollType(), e.getScrollAmount(), e.getWheelRotation(), e.getPreciseWheelRotation());
 	}
 	
 	protected void convertMouse(Point point) throws NoninvertibleTransformException {
