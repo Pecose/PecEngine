@@ -1,15 +1,15 @@
 package A;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 
 import display.Frame;
 import display.Panel;
 import display.PecEngine;
+import display.Screen;
+import listeners.MouseMovedListener;
 
-public class Main implements PecEngine, MouseMotionListener, KeyListener{
+public class Main implements PecEngine, MouseMovedListener{
 
 	public static void main(String[] args){ PecEngine.start(new Main()); }
 	private Frame frame;
@@ -18,47 +18,28 @@ public class Main implements PecEngine, MouseMotionListener, KeyListener{
 	@Override
 	public void creation(Frame f){
 		this.frame = f;
+		f.setSize(500, 500);
+//		f.panel.setSize(new Dimension(500, 500));
 		
-		
-		f.addMouseMotionListener(this);
-		f.addKeyListener(this);
+		f.pack();
+		f.setLocationRelativeTo(null);
+		f.setFullScreen();
+		f.addMouseMovedListener(this);
+		System.out.println("Screen Width: "+Screen.getWidth()+" Screen Height: "+Screen.getHeight());
 	}
 
 	@Override
 	public void display(Panel p, Graphics2D g){
-		g.fillRect(200, 200, 300, 300);
+		g.fillRect(0, 0, 1000, 500);
 		g.fillRect(x, y, 250, 250);
 	}
 
-	@Override
-	public void mouseDragged(MouseEvent e){
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void mouseMoved(MouseEvent e){
 		x=e.getX();
 		y=e.getY();
 	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		System.out.println(e.getKeyChar());
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	
 	
 //	public Server server;

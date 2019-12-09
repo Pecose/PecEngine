@@ -1,6 +1,5 @@
 package display;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -10,12 +9,9 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
-
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.EventListenerList;
-
 import listeners.KeyPressedListener;
 import listeners.KeyReleasedListener;
 import listeners.KeyTypedListener;
@@ -32,23 +28,21 @@ import listeners.MouseWheelMovedListener;
 public class Panel extends JPanel{  
 	private static final long serialVersionUID = -696807925661491890L;
 	public Frame frame;
+	public static final int DEFAULT = 0;
+	public static final int PROPORTIONAL = 1;
+	public static final int ADAPTABLE = 2;
 	
-	private boolean proportional; // lorsque cette variable est à true, l'adaptation respecte le rapport hauteur/largeur voulu du dessin, à l'inverse lorsqu'elle est à false, la largeur et la hauteur sont adaptée à la dimension correspondante sans respecter le rapport hauteur/largeur du dessin
-	private boolean adaptable; // lorsque cette variable est à true l'échelle du dessin est adaptée à la taille du panel, sinon le dessin est fait dans les dimensions voulues du dessin
-	private final Dimension drawsize; // la taille voulue du dessin à l'échelle 1:1
-	private EventListenerList eventlisteners;
+	private int displayOption = PROPORTIONAL;
+	private final Dimension drawsize = new Dimension(Screen.getWidth(), Screen.getHeight());
+	private EventListenerList eventlisteners = new EventListenerList();
+	private Insets insets = getInsets();
 	
+	public int getDisplayOption() { return displayOption; }
+	public void setDisplayOption(int displayOption) { this.displayOption = displayOption; }
 	public Dimension getDrawsize(){ return drawsize; }
 	
     /** @param pecEngine Objet créé par l'utilisateur pour définir le code d'affichage */
 	public Panel(PecEngine pecEngine){
-		
-		// MouseEventInterceptor a modifier par Listeners--------------------------------------------
-//		MouseEventInterceptor mouseEventInterceptor = new MouseEventInterceptor(this);
-//		super.addMouseListener(mouseEventInterceptor);
-//		super.addMouseMotionListener(mouseEventInterceptor);
-//		super.addMouseWheelListener(mouseEventInterceptor);
-		//-------------------------------------------------------------------------------------------
 		
 		Listeners listeners = new Listeners(this);
 		super.addMouseListener(listeners);
@@ -58,48 +52,23 @@ public class Panel extends JPanel{
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override public void run(){ Panel.this.frame = new Frame(pecEngine, Panel.this); }
 		});
-		this.eventlisteners = new EventListenerList();
-		this.proportional=true; // adaptation proportionnelle par défaut
-		this.adaptable=true; // adaptation par défaut
-		this.drawsize = new Dimension(Screen.getWidth(), Screen.getHeight());
-		this.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10,this.getBackground()));
-		this.setBackground(Color.WHITE);
-		this.setPreferredSize(new Dimension(300, 300));
+		
+		this.setPreferredSize(drawsize);
 	}
- 
-    /** @param proportional true pour adaptation proportionelle, false sinon */
-	public void setProportional(boolean proportional) {
-		boolean old = this.proportional;
-		this.proportional=proportional;
-		if ( old!=proportional ) { // si la valeur change
-			firePropertyChange("PROPORTIONAL", old, proportional); // on envoie un événement pour indiquer que la propriété a changé
-			repaint(); // on redessine pour tenir compte du changement
-		}
-	}
- 
-    /** return true si l'adaptation est actuellement proportionnelle, ou false sinon */
-	public boolean isProportional() {
-		return proportional;
-	}
- 
-    /** @param adaptable true pour adaptation, false sinon */
-	public void setAdaptable(boolean adaptable) {
-		boolean old = this.adaptable;
-		this.adaptable=adaptable;
-		if ( old!=adaptable ) { // si la valeur change
-			firePropertyChange("ADAPTABLE", old, adaptable); // on envoie un événement pour indiquer que la propriété a changé
-			repaint(); // on redessine pour tenir compte du changement
-		}
-	}
- 
-    /** return true si l'adaptation est actuellement active, ou false sinon */
-	public boolean isAdaptable() { return adaptable; }
  
     /** Détermine la taille actuelle du panel sans les bordures */
 	public Dimension getInnerDimension(Dimension dimension) {
-		Insets insets=getInsets();
-		return new Dimension(Math.max(0, dimension.width-insets.left-insets.right), 
-				Math.max(0, dimension.height-insets.top-insets.bottom));
+		return new Dimension(this.getInnerWidth(dimension), this.getInnerHeight(dimension));
+	}
+	
+	/** Détermine la largueur actuelle du panel sans les bordures */
+	private int getInnerWidth(Dimension dimension) {
+		return Math.max(0, dimension.width-insets.left-insets.right);
+	}
+	
+	/** Détermine la hauteur actuelle du panel sans les bordures */
+	private int getInnerHeight(Dimension dimension) {
+		return Math.max(0, dimension.height-insets.top-insets.bottom);
 	}
  
     /** Dessine le fond du composant à l'aide du painter */
@@ -119,7 +88,7 @@ public class Panel extends JPanel{
 		g2D.transform(AffineTransform.getTranslateInstance(insets.left, insets.top)); 
 		
 		// si l'adapdation est active
-		if(adaptable) adapt(g2D); // on adapte
+		adapt(g2D); // on adapte
 		this.frame.pecEngine.display(this, g2D); // on provoque le dessin en invoquant le painter
 		this.repaint();
 		g2D.dispose(); // on libère les ressources créées pour le contexte graphique
@@ -131,43 +100,43 @@ public class Panel extends JPanel{
      *  et des dimensions actuelles du panel, et des dimensions préférentielles
      */ 
 	private void adapt(Graphics2D g2d) {
-                // adapte de façon proportionnelle le dessin de la taille voulue à la taille préférentielle, en éliminant les bordures éventuelles (sinon on se superposerait aux bordures)
-		proportionalAffineTransform(g2d, getInnerDimension(getDrawsize()), getInnerDimension(getPreferredSize()));
-		if(proportional) { // si l'adaptation est proportionnelle, on s'adapte proportionnellement à la taille actuelle du composant
-			adaptProportional(g2d); // adaptation proportionnelle
-		}else{
-			affineTransform(g2d, getInnerDimension(getDrawsize()), getInnerDimension(getSize())); // on adapte la largeur et la hauteur indépendamment (non proportionelle )
+        if(getDisplayOption() == PROPORTIONAL){
+			// si l'adaptation est proportionnelle, on s'adapte proportionnellement à la taille actuelle du composant
+        	g2d.transform(proportionalAffineTransform(getInnerDimension(getDrawsize()), getInnerDimension(getSize())));
+		}else if(getDisplayOption() == ADAPTABLE) {
+        	// adapte de façon proportionnelle le dessin de la taille voulue à la taille préférentielle, 
+         	// en éliminant les bordures éventuelles (sinon on se superposerait aux bordures)
+			g2d.transform(affineTransform(getInnerDimension(getDrawsize()), getInnerDimension(getSize()))); 
 		}
 	}
- 
-    /** adaptation proportionnelle de la taille du dessin à la taille du composant */
-	private void adaptProportional(Graphics2D g2d) {
-		proportionalAffineTransform(g2d, getInnerDimension(getDrawsize()), getInnerDimension(getSize()));
-	}
+	
  
     /** détermine la transformation d'échelle nécessaire pour qu'un composant
      *  de dimension fromsize à l'échelle 1 se dessine à la dimension tosize, 
      *  sans respecter le rapport largeur/hauteur voulu
+     * @return 
      */
-	private void affineTransform(Graphics2D g2d, Dimension fromsize, Dimension tosize) {
+	public AffineTransform affineTransform(Dimension fromsize, Dimension tosize) {
 		double sx = tosize.getWidth()/fromsize.getWidth(); // le facteur d'échelle horizontal est le rapport entre la largeur cible et la largeur d'origine
 		double sy = tosize.getHeight()/fromsize.getHeight(); // le facteur d'échelle vertical est le rapport entre la hauteur cible et la hauteur d'origine
-		g2d.transform(AffineTransform.getScaleInstance(sx, sy)); // on créé une transformée affine d'échelle et on la compose avec la transformée actuelle affectée au contexte graphique
+		return AffineTransform.getScaleInstance(sx, sy); // on créé une transformée affine d'échelle et on la compose avec la transformée actuelle affectée au contexte graphique
 	}
- 
+	
 	/**
 	 * détermine la transformation d'échelle nécessaire pour qu'un composant de dimension fromsize 
 	 * à l'échelle 1 se dessine à la dimension tosize, en respectant le rapport largeur/hauteur voulu
+	 * @return 
      */
-	private void proportionalAffineTransform(Graphics2D g2d, Dimension fromsize, Dimension tosize) {
+	public AffineTransform proportionalAffineTransform(Dimension fromsize, Dimension tosize) {
 		double sx = tosize.getWidth()/fromsize.getWidth(); // le facteur d'échelle horizontal est le rapport entre la largeur cible et la largeur d'origine
 		double height = fromsize.getHeight()*sx; // on calcule la hauteur proportionnelle avec le facteur d'échelle horizontal
 		if ( height > tosize.getHeight() ) { // si la hauteur transformée est trop grande pour la hauteur cible, on adapte verticalement
 			sx = tosize.getHeight()/fromsize.getHeight(); // le facteur d'échelle vertical est le rapport entre la hauteur cible et la hauteur d'origine (pour que le dessin ne dépasse pas la hauteur)
 		}
-		g2d.transform(AffineTransform.getScaleInstance(sx, sx)); // on applique un changement d'échelle de même facteur horizontal et vertical pour respecter le rapport largeur/hauteur voulu
+		return AffineTransform.getScaleInstance(sx, sx); // on applique un changement d'échelle de même facteur horizontal et vertical pour respecter le rapport largeur/hauteur voulu
 	}
-
+	
+	
 	//Liste des getters ------------------------------------------------
 	@Override
 	public synchronized MouseListener[] getMouseListeners() {
@@ -313,7 +282,6 @@ public class Panel extends JPanel{
 		eventlisteners.add(MouseWheelMovedListener.class, l);
 	}
 	
-	
 	//Liste des removers ------------------------------------------------
 	@Override
 	public synchronized void removeMouseListener(MouseListener l) {
@@ -393,7 +361,6 @@ public class Panel extends JPanel{
 		if(l == null) return;
 		eventlisteners.remove(MouseWheelMovedListener.class, l);
 	}
-	
 	
 }
 
