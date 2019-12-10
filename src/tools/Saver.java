@@ -2,24 +2,20 @@ package tools;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Serializable;
-import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Saver{
 	
-	private String path;
 	private BufferedReader reader;
 	private BufferedWriter writer;
 	
-	public Saver(String name) throws Exception{
-		path = System.getProperty("user.dir").toString() + "\\" + name;
-		File file = new File(path);
-		if(!file.exists()){ file.createNewFile(); }
-		reader = new BufferedReader(new FileReader(path));
-		writer = new BufferedWriter(new FileWriter(path));
+	public Saver(String name){
+		Files.loadFile(name);
+		reader = Files.loadBufferedReader(name);
+		writer = Files.loadBufferedWriter(name, Files.ADD);
 	}
 	
 	public void save(Serializable save){
@@ -32,17 +28,32 @@ public class Saver{
 		
 	}
 	
-	public Serializable load(){
+	public List<String> loadStrings(){
+		List<String> lignes = new ArrayList<>();
 		try{
-			return Serializer.deserializeString(reader.readLine());
+			String line="";
+			while ((line = reader.readLine()) != null) {
+				lignes.add(line);
+			}
 		}catch(Exception e){
-			System.err.println("Saver load " + e.getMessage());
-		}return null;
+			System.err.println("[Saver load] " + e.getMessage());
+		}
+		return lignes;
 	}
 	
-	public Scanner getScanner(){
-		try{ return new Scanner(new File(path));
-		}catch(Exception e){ e.printStackTrace(); }
-		return null;
+	public void close() {
+		this.closeReader();
+		this.closeWriter();
 	}
+	public void closeReader() {
+		try{
+			reader.close();
+		}catch(IOException e){ e.printStackTrace(); }
+	}
+	public void closeWriter() {
+		try{
+			writer.close();
+		}catch(IOException e){ e.printStackTrace(); }
+	}
+	
 }

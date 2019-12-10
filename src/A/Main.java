@@ -1,67 +1,46 @@
 package A;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 
 import display.Frame;
 import display.Panel;
-import display.Mouse;
 import display.PecEngine;
+import display.Screen;
+import listeners.MouseMovedListener;
 
-public class Main implements PecEngine, MouseMotionListener, MouseListener{
+public class Main implements PecEngine, MouseMovedListener{
 
 	public static void main(String[] args){ PecEngine.start(new Main()); }
 	private Frame frame;
-	private Mouse mouse;
+	int x=0, y=0;
 	
 	@Override
-	public void creation(Frame f, Mouse m){
-		f.addMouseMotionListener(this);
-		f.addMouseListener(this);
+	public void creation(Frame f){
 		this.frame = f;
-		this.mouse = m;
+		f.setSize(500, 500);
+//		f.panel.setSize(new Dimension(500, 500));
+		
+		f.pack();
+		f.setLocationRelativeTo(null);
+		f.setFullScreen();
+		f.addMouseMovedListener(this);
+		System.out.println("Screen Width: "+Screen.getWidth()+" Screen Height: "+Screen.getHeight());
 	}
 
 	@Override
 	public void display(Panel p, Graphics2D g){
-		g.fillRect(mouse.getX(), mouse.getY(), 10, 10);
+		g.fillRect(0, 0, 1000, 500);
+		g.fillRect(x, y, 250, 250);
 	}
-	
-	@Override
-	public void mouseDragged(MouseEvent e){}
+
 
 	@Override
 	public void mouseMoved(MouseEvent e){
+		x=e.getX();
+		y=e.getY();
 	}
-
-	@Override
-	public void mouseClicked(MouseEvent e){
-		this.frame.setFullScreen();
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e){
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e){
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e){
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e){
-		
-	}
+	
 	
 //	public Server server;
 //	public Client client;

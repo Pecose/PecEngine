@@ -1,11 +1,7 @@
 package display;
 
-import java.awt.Graphics2D;
-
-public interface PecEngine{
+public interface PecEngine extends Display, Creation{
 	
 	public static void start(PecEngine pecEngine){ new Panel(pecEngine); }
 	
-	public void creation(Frame f, Mouse mouse);
-	public void display(Panel p, Graphics2D g);
 }

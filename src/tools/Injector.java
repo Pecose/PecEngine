@@ -18,7 +18,8 @@ public class Injector {
 			ArrayList<String> namesList = new ArrayList<String>();
 			while(scanner.hasNext()){ namesList.add(scanner.next()); }
 			for(String string : namesList){ 
-				Object object = Class.forName(string).newInstance();
+//				Object object = Class.forName(string).newInstance();
+				Object object = Class.forName(string).getDeclaredConstructor();
 				String[] name = object.getClass().getInterfaces()[0].getName().split("\\.");
 				classList.put(name[name.length-1], object);	
  
