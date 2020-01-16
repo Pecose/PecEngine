@@ -12,7 +12,12 @@ public class HomeClient implements ClientManager{
 	
 	@Override
 	public void Client(Serializable message){
-		
+		Player player = (Player) message;
+		if(players.containsKey(player.getLogin())) {
+			players.replace(player.getLogin(), player);
+		}else {
+			players.put(player.getLogin(), player);
+		}
 	}
 
 }

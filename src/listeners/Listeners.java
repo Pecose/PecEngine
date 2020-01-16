@@ -12,7 +12,7 @@ import javax.swing.event.MouseInputListener;
 
 import display.Panel;
 
-public class Listeners extends MouseManager implements MouseInputListener, MouseWheelListener, KeyListener{
+public class Listeners extends EventManager implements MouseInputListener, MouseWheelListener, KeyListener{
 
 	public Listeners(Panel panel){ super(panel); }
 	

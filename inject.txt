@@ -1,7 +1,0 @@
-Poisson
-Voiture
-Arbre
-Viande
-Camion
-Crabe
-Pomme

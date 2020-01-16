@@ -29,8 +29,6 @@ public class Frame extends JFrame{
 	public Panel panel;
 	public PecEngine pecEngine;
 	
-	protected static int x = 0;
-	protected static int y = 0;
 	private boolean fullScreen = true;
 
 	public Frame(PecEngine pecEngine, Panel panel){ 
@@ -42,6 +40,8 @@ public class Frame extends JFrame{
 	@Override
 	public void setSize(Dimension d) {
 		this.setPreferredSize(d);
+		this.pack();
+		this.setLocationRelativeTo(null);
 	}
 	
 	@Override
@@ -49,13 +49,20 @@ public class Frame extends JFrame{
 		this.setSize(new Dimension(width, height));
 	}
 	
-	public void setX(int x){ Frame.x = x; }
-	public void setY(int y){ Frame.y = y; }
-	public long timer(){ return System.currentTimeMillis(); }
+//	public long timer(){ return System.currentTimeMillis(); }
+//	public int getRelative(double x){ return (int)( Screen.getWidth() * x )/100; }
 	
-	public int getRelative(double x){ return (int)( Screen.getWidth() * x )/100; }
+	public void setDisplayOption(int displayOption) { this.panel.setDisplayOption(displayOption); }
 	
-	public void setFullScreen() {
+	public void goWindowed(){
+		if(this.fullScreen){ this.toggleFullScreen(); }
+	}
+	
+	public void goFullScreen(){
+		if(!this.fullScreen){ this.toggleFullScreen(); }
+	}
+	
+	public void toggleFullScreen() {
 		boolean old = fullScreen;
 		this.fullScreen = !fullScreen;
 		this.firePropertyChange("FULLSCREEN", old, fullScreen);
@@ -63,25 +70,23 @@ public class Frame extends JFrame{
 	
 	private void toggleFullScreen(PropertyChangeEvent e) {
 		if((boolean) e.getNewValue()) {
-			this.goFullScreen();
+			this.fullScreen();
 		}else {
-			this.goWindowed();
+			this.windowed();
 		}
 	}
 	
-	private void goFullScreen() {
+	private void fullScreen() {
 		this.dispose();
 		this.setUndecorated(true);
 		GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		device.setFullScreenWindow(this);
 	}
 	
-	private void goWindowed() {
+	private void windowed() {
 		this.dispose();
 		this.setUndecorated(false);
-		this.setPreferredSize(new Dimension(Screen.getWidth(), Screen.getHeight())); //a mettre avent setLocationRelativeTo
-		this.pack();
-		this.setLocationRelativeTo(null); //Centrer la fenetre
+		this.setSize(Screen.getWidth(), Screen.getHeight());
 		this.setVisible(true);
 	}
 	
@@ -89,7 +94,7 @@ public class Frame extends JFrame{
 		this.addPropertyChangeListener("FULLSCREEN", e->this.toggleFullScreen(e));
 		this.setContentPane(panel);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setFullScreen();
+		this.windowed();
 		this.pecEngine.creation(this);
 	}
 	

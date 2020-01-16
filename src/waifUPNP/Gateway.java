@@ -19,7 +19,7 @@
 package waifUPNP;
 
 import java.net.HttpURLConnection;
-import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,19 +33,20 @@ import org.w3c.dom.traversal.NodeFilter;
 import org.w3c.dom.traversal.NodeIterator;
 
 /**
- * 
  * @author Federico
  */
 class Gateway {
 
-    private Inet4Address iface;
+    private InetAddress iface;
 
     private String serviceType = null, controlURL = null;
 
-    public Gateway(byte[] data, Inet4Address ip) throws Exception {
-        iface = ip;
+    public Gateway(byte[] data, InetAddress ip) throws Exception {
+        this.iface = ip;
         String location = null;
         StringTokenizer st = new StringTokenizer(new String(data), "\n");
+        
+        
         while (st.hasMoreTokens()) {
             String s = st.nextToken().trim();
             if (s.isEmpty() || s.startsWith("HTTP/1.") || s.startsWith("NOTIFY *")) {
@@ -56,12 +57,11 @@ class Gateway {
                 location = val;
             }
         }
-        if (location == null) {
-            throw new Exception("Unsupported Gateway");
-        }
-        Document d;
-        d = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(location);
+        if (location == null) { throw new Exception("Unsupported Gateway"); }
+        
+        Document d = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(location);
         NodeList services = d.getElementsByTagName("service");
+        
         for (int i = 0; i < services.getLength(); i++) {
             Node service = services.item(i);
             NodeList n = service.getChildNodes();

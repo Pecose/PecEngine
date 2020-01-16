@@ -15,16 +15,43 @@ public class Saver{
 	public Saver(String name){
 		Files.loadFile(name);
 		reader = Files.loadBufferedReader(name);
-		writer = Files.loadBufferedWriter(name, Files.ADD);
+		writer = Files.loadBufferedWriter(name, Files.REWRITE);
 	}
 	
-	public void save(Serializable save){
+	public void save(List<Serializable> list){
 		try{
-			writer.write(Serializer.serializeString(save));
+			for(Serializable data : list){
+				writer.write(Serializer.serializeString(data));
+				writer.write("\n");
+			}
 			writer.flush();
 		}catch(Exception e){
 			System.err.println("[Saver save] " + e.getMessage());
 		}
+		
+	}
+	
+	public List<Serializable> load(){
+		List<Serializable> list = new ArrayList<>();
+		try{
+			String line="";
+			while ((line = reader.readLine()) != null) {
+				list.add(Serializer.deserializeString(line));
+			}
+		}catch(Exception e){
+			System.err.println("[Saver load] " + e.getMessage());
+		}
+		return list;
+	}
+	
+	public void saveStrings(List<String> list){
+		try{
+			for(String data : list){
+				writer.write(data);
+				writer.write("\n");
+			}
+			writer.flush();
+		}catch(Exception e){ System.err.println("[Saver save] " + e.getMessage()); }
 		
 	}
 	
@@ -35,9 +62,7 @@ public class Saver{
 			while ((line = reader.readLine()) != null) {
 				lignes.add(line);
 			}
-		}catch(Exception e){
-			System.err.println("[Saver load] " + e.getMessage());
-		}
+		}catch(Exception e){ System.err.println("[Saver load strings] " + e.getMessage()); }
 		return lignes;
 	}
 	

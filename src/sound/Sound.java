@@ -43,14 +43,8 @@ public class Sound {
 		return this;
 	}
 	
-	private void adjustVolume(){ 
-		FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-		float range = gainControl.getMaximum() - gainControl.getMinimum();
-		float gain = (range * this.volume) + gainControl.getMinimum();
-		gainControl.setValue(gain); 
-	}
-	  
 	public void play(){ 
+		if (status.equals("pause")){ this.resumeAudio(); } 
 		if (status.equals("play")){ this.resetAudioStream(); } 
 		this.adjustVolume();
 	    clip.start(); 
@@ -65,17 +59,6 @@ public class Sound {
 	    this.currentFrame = this.clip.getMicrosecondPosition(); 
 	    clip.stop(); 
 	    status = "paused"; 
-	} 
-	  
-	public void resumeAudio(){ 
-	    if (status.equals("play")){ 
-	        System.out.println("Audio is already "+"being played"); 
-	        return; 
-	    } 
-	    clip.close(); 
-	    resetAudioStream(); 
-	    clip.setMicrosecondPosition(currentFrame); 
-	    this.play(); 
 	} 
 	  
 	public void restart(){ 
@@ -104,7 +87,11 @@ public class Sound {
 	    } 
 	} 
 	  
-	public void resetAudioStream(){ 
+	public void loop(){ 
+	    clip.loop(Clip.LOOP_CONTINUOUSLY);
+	} 
+	
+	private void resetAudioStream(){ 
 		try {
 		    audioInputStream = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile()); 
 		    clip = AudioSystem.getClip(); 
@@ -113,7 +100,21 @@ public class Sound {
 		
 	} 
 
-	public void loop(){ 
-	    clip.loop(Clip.LOOP_CONTINUOUSLY);
+	private void adjustVolume(){ 
+		FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+		float range = gainControl.getMaximum() - gainControl.getMinimum();
+		float gain = (range * this.volume) + gainControl.getMinimum();
+		gainControl.setValue(gain); 
+	}
+	  
+	private void resumeAudio(){ 
+	    if (status.equals("play")){ 
+	        System.out.println("Audio is already "+"being played"); 
+	        return; 
+	    } 
+	    clip.close(); 
+	    resetAudioStream(); 
+	    clip.setMicrosecondPosition(currentFrame); 
+	    this.play(); 
 	} 
 }

@@ -1,90 +1,76 @@
 package A;
-import java.awt.Dimension;
+
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
+import java.util.Map.Entry;
 
 import display.Frame;
 import display.Panel;
 import display.PecEngine;
-import display.Screen;
+import listeners.KeyPressedListener;
 import listeners.MouseMovedListener;
+import server.Client;
+import server.Server;
+import tools.Saver;
 
-public class Main implements PecEngine, MouseMovedListener{
+public class Main implements PecEngine, KeyPressedListener, MouseMovedListener{
 
+	public Server server;
+	public Client client;
+	public HomeServer homeServer = new HomeServer();
+	public HomeClient homeClient = new HomeClient();
+	public Player player;
+	public Point2D mouse = new Point2D.Double(0,0);
+	
 	public static void main(String[] args){ PecEngine.start(new Main()); }
-	private Frame frame;
-	int x=0, y=0;
-	
+
 	@Override
-	public void creation(Frame f){
-		this.frame = f;
-		f.setSize(500, 500);
-//		f.panel.setSize(new Dimension(500, 500));
-		
-		f.pack();
-		f.setLocationRelativeTo(null);
-		f.setFullScreen();
+	public void creation(Frame f) {
+		Saver saver = new Saver("aze.txt");
+		saver.saveXXX();
+//		f.setSize(300, 300);
+		f.setDisplayOption(Panel.ADAPTABLE);
 		f.addMouseMovedListener(this);
-		System.out.println("Screen Width: "+Screen.getWidth()+" Screen Height: "+Screen.getHeight());
+		f.addKeyPressedListener(this);
+		player = new Player("Pecose", Color.red, new Point2D.Double(0, 0));
+		homeServer.setMain(this);
+	}
+	
+	@Override
+	public void display(Panel p, Graphics2D g) {
+		g.setColor(Color.BLUE);
+		g.fillRect((int)this.mouse.getX(), (int)this.mouse.getY(), 60, 60);
+		player.setPosition(mouse);
+		if(client != null && client.isAlive()) {
+			client.send(player);
+		}
+		
+		for(Entry<String, Player> current : homeClient.getPlayers().entrySet()) {
+			Player pl = current.getValue();
+			g.setColor(pl.getTeam());
+			g.fill(new Ellipse2D.Double(pl.getPosition().getX(), pl.getPosition().getY(), 10, 10));
+		}
 	}
 
 	@Override
-	public void display(Panel p, Graphics2D g){
-		g.fillRect(0, 0, 1000, 500);
-		g.fillRect(x, y, 250, 250);
+	public void keyPressed(KeyEvent key){
+		if(key.getKeyChar() == 's' && server == null) {
+			server = new Server(1813, homeServer);
+			System.out.println("Vous venez de créé un serveur");
+		}else if(key.getKeyChar() == 'c' && client == null){
+			client = new Client(Server.localhost(), 1813, "Pecose", homeClient);
+//			client = new Client("109.24.249.39", 1813, "Pecose", homeClient);
+			System.out.println("Vous venez de créé un client");
+		}
 	}
-
 
 	@Override
-	public void mouseMoved(MouseEvent e){
-		x=e.getX();
-		y=e.getY();
+	public void mouseMoved(MouseEvent e) {
+		mouse.setLocation(e.getX(), e.getY());
 	}
-	
-	
-//	public Server server;
-//	public Client client;
-//	public HomeServer homeServer = new HomeServer();
-//	public HomeClient homeClient = new HomeClient();
-//	public Player player;
-//	public HashMap<String, Player> playersMap;
-//	
-//	public static void main(String[] args){
-//		PecEngine.start(new Main());
-//	}
-//
-//	@Override
-//	public void creation(Window window){
-//		player = new Player("Pecose", Color.red, new Point2D.Double(0, 0));
-//		homeServer.setMain(this);
-//	}
-//
-//	@Override
-//	public void display(Brush brush, Mouse mouse){
-//		player.setPosition(mouse.getPosition());
-//		if(client != null) {
-//			client.send(player);
-//		}
-//		
-//		for(Entry<String, Player> player : playersMap.entrySet()) {
-//			Player p = player.getValue();
-//			brush.graphics.setColor(p.getTeam());
-//			brush.graphics.fill(new Ellipse2D.Double(p.getPosition().getX(), p.getPosition().getY(), 10, 10));
-//		}
-//		
-//	}
-//	
-//	@Override
-//	public void keyPressed(KeyEvent key){
-//		if(key.getKeyChar() == 's') {
-//			server = new Server(1813, homeServer);
-//			System.out.println("Vous venez de créé un serveur");
-//		}else if(key.getKeyChar() == 'c'){
-//			client = new Client("10.234.100.23", 1813, "Pecose", homeClient);
-//			System.out.println("Vous venez de créé un client");
-//		}
-//	}
-//
-//	
 
 }

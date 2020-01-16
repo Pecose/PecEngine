@@ -18,6 +18,7 @@
  */
 package waifUPNP;
 
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.Inet4Address;
@@ -45,10 +46,10 @@ abstract class GatewayFinder {
 
     private class GatewayListener extends Thread {
 
-        private Inet4Address ip;
+        private InetAddress ip;
         private String req;
 
-        public GatewayListener(Inet4Address ip, String req) {
+        public GatewayListener(InetAddress ip, String req) {
             setName("WaifUPnP - Gateway Listener");
             this.ip = ip;
             this.req = req;
@@ -62,19 +63,14 @@ abstract class GatewayFinder {
                 DatagramSocket s = new DatagramSocket(new InetSocketAddress(ip, 0));
                 s.send(new DatagramPacket(req, req.length, new InetSocketAddress("239.255.255.250", 1900)));
                 s.setSoTimeout(3000);
-                for (;;) {
-                    try {
-                        DatagramPacket recv = new DatagramPacket(new byte[1536], 1536);
-                        s.receive(recv);
-                        Gateway gw = new Gateway(recv.getData(), ip);
-                        gatewayFound(gw);
-                    } catch (SocketTimeoutException t) {
-                        break;
-                    } catch (Throwable t) {
-                    }
+                for(;;) {
+                	DatagramPacket recv = new DatagramPacket(new byte[1536], 1536);
+                	
+                    s.receive(recv);//Problème ici!!!!!!!!!
+                    Gateway gw = new Gateway(recv.getData(), ip);
+                    gatewayFound(gw);
                 }
-            } catch (Throwable t) {
-            }
+            }catch (Exception e) { System.err.println(e); }
         }
     }
 

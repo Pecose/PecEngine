@@ -63,12 +63,17 @@ public class Client extends Thread{
 		}
 	}
 	
-	public Client(String InetAdress, int port, String login, ClientManager clientManager){
+	public Client(String address, int port, String login, ClientManager clientManager){
 		try{
-			UPnP.openPortTCP(port);
+//			UPnP.openPortTCP(port);
+			
+			
+
+
 			this.clientManager = clientManager;
 			this.login = login;
-			this.socket = new Socket(InetAdress, port);
+			
+			this.socket = new Socket(address, port);
 			this.dataInputStream = new DataInputStream(socket.getInputStream());
 			this.dataOutputStream = new DataOutputStream(socket.getOutputStream());
 			this.dataOutputStream.writeUTF(login);

@@ -61,7 +61,8 @@ public class Connection extends Thread{
 	public void run(){
 		try{ 
 			while(true){
-				String colis = (String) Serializer.deserializeString(dataInputStream.readUTF());
+//				String colis = (String) Serializer.deserializeString(dataInputStream.readUTF());
+				String colis = dataInputStream.readUTF();
 				if(colis.substring(0, 2).equals("//")){
 					System.out.println(colis.substring(2));
 				}else if(colis.substring(0, 2).equals(">>")){
@@ -78,7 +79,8 @@ public class Connection extends Thread{
 					colis = colis.substring(i+1);
 					server.getConnection(recipient).send(colis);
 				}else{
-					this.server.getServerManager().Server(colis);
+//					this.server.getServerManager().Server(colis);
+					this.server.getServerManager().Server(Serializer.deserializeString(colis));
 				}
 			} 
 		}catch (Exception e) { 

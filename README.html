@@ -1,0 +1,316 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>README PecEngine</title>
+	</head>
+	<body>
+		 <h1> Comment utiliser PecEngine </h1>
+		 <p> Release 1.0 </p>
+		 <p> Dernière révision le 10 janvier 2020 </p>
+		 <p style="font-weight: bold;"> Ce logiciel est un logiciel Open Source. </p>
+		  
+	  	<h2>PRESENTATION:</h2>
+		  	<p>
+		  		Ce logiciel a pour but de rassembler un ensemble d'outils utiles à l'élaboration de projets avec interface graphique.<br/>
+				Il est construit avec les seules fonctionnalités qu'offre Java SE 12 pour ne pas bousculer les habitudes de travail.<br/>
+				PecEngine permet de construire facilement une fenetre adapter à la réalisation de logiciels de bureaux ou de jeux videos.<br/>
+				Il permet de:
+				<ol>
+					<li>Jouer des sons</li>
+					<li>Gérer clavier et souris</li>
+			    	<li>Adapter les composants à la taille de la fenetre</li>
+			    	<li>Faire des sauvegarde sur fichier</li>
+			    	<li>Créé des connection serveur/client</li>
+			    	<li>Faire de l'injection de dépendance</li>
+			    </ol>
+			</p>
+		  	
+		  	<p style="font-weight: bold;">Les différents chapitres:</p>
+		  	<ol>
+		      <li><a href="#Installation">INSTALLATION</a></li>
+		      <li><a href="#Frame">FRAME</a></li>
+		      <li><a href="#Panel">PANEL</a></li>
+		      <li><a href="#Sound">SOUND</a></li>
+		      <li><a href="#Listeners">LISTENERS</a></li>
+		      <li><a href="#Injector">INJECTOR</a></li>
+		      <li><a href="#Files">FILES</a></li>
+		      <li><a href="#Serializer">SERIALIZER</a></li>
+		      <li><a href="#Saver">SAVER</a></li>
+		    </ol>
+	  	
+	  	<h2 id="Installation">INSTALLATION:</h2>
+		  	<p>Pour installer PecEngine, ajoutez le jar à votre projet et configurez le build-path.
+			</br>Créer une classe qui sera votre main.</p>
+			<p>Elle doit extends de PecEngine:</p>
+			<code>public class Main extends PecEngine{ }</code>
+			<p>Puis ajoutez:</p>
+			<code>public static void main(String[] args){ PecEngine.start(new Main()); }</code>
+			<p style="text-align: left; font-weight: bold;">info: Frame hérite de JFrame et Panel hérite de JPanel</p>
+		
+		<h2 id="Frame">FRAME:</h2>
+		  	<p>La classe Frame hérite de <a href="https://docs.oracle.com/javase/7/docs/api/javax/swing/JFrame.html">JFrame</a> elle en a donc toutes les méthodes.
+			</br>mais elle en possède aussi de nouvelles:</p>
+			<ol>
+		    	<li>
+					Passer la frame en mode fenêtré si elle est en plein écran:<br/>
+					<code>frame.goWindowed();</code>
+				</li>
+				<li>
+					Passer la frame en plein écran si elle est en mode fenêtré:<br/>
+					<code>frame.goFullScreen();</code>
+				</li>
+				<li>
+					Active ou désactive le plein écran en fonction du mode dans lequel elle se trouve:<br/>
+					<code>frame.toggleFullScreen();</code>
+				</li>
+				<li>
+					Redéfinition de la méthode de JFrame pour quel fonctionne:<br/>
+					<code>frame.setSize(int width, int height);</code>
+				</li>
+				<li>
+					Fait simplement appel à la fonction setDisplayOption(int displayOption) de Panel:<br/>
+					<code>frame.setDisplayOption(int displayOption);</code>
+				</li>
+		    </ol>	
+		
+		<h2 id="Panel">PANEL:</h2>
+		  	<p>La classe Panel hérite de <a href="https://docs.oracle.com/javase/7/docs/api/javax/swing/JPanel.html">JPanel</a> elle en a donc toutes les méthodes.
+			</br>mais elle en possède aussi de nouvelles:</p>
+			<p style="font-weight: bold;">ARGUMENTS:</p>
+			<ol>
+				<li>
+					Cet argument defini les options d'affichage<br/>
+					<code>private int displayOption = PROPORTIONAL;</code>
+				</li>
+		    	<li>
+					La taille, position et proportion des élements affichés est fixe:<br/>
+					<code>public static final int DEFAULT = 0;</code>
+				</li>
+				<li>
+				 	La taille, position et proportion des élements affichés s'adapte aux changements de taille de la fenêtre:<br/>
+					<code>public static final int PROPORTIONAL = 1;</code>
+				</li>
+				<li>
+					La taille, position des élements affichés s'adapte aux changements de taille de la fenêtre:<br/>
+					<code>public static final int ADAPTABLE = 2;</code>
+				</li>
+		    </ol>	
+		    <p style="font-weight: bold;">METHODES:</p>
+			<ol>
+		    	<li>
+					Passer la frame en mode fenêtré si elle est en plein écran:<br/>
+					<code>panel.setDisplayOption(int displayOption);</code>
+				</li>
+				<li>
+					Passer la frame en plein écran si elle est en mode fenêtré:<br/>
+					<code>frame.goFullScreen();</code>
+				</li>
+				<li>
+					Active ou désactive le plein écran en fonction du mode dans lequel elle se trouve:<br/>
+					<code>frame.toggleFullScreen();</code>
+				</li>
+				<li>
+					Redéfinition de la méthode de JFrame pour quel fonctionne:<br/>
+					<code>frame.setSize(int width, int height);</code>
+				</li>
+		    </ol>	
+		
+		<h2 id="Sound">SOUND:</h2>
+		  	<p>
+			  	Sound permet faire un outil destiner à jouer un son.</br>
+			  	Il peut lire des fichiers au format AIFF, AU et WAV</br>
+			  	<div style="font-weight: bold;">Attention, seul les formats 8bit et 16bit sont supportés.</div>
+			  	Cet outil utilise l'API javax.sound, il est possible d'en consulter la documentation: 
+				<a href="https://docs.oracle.com/javase/8/docs/technotes/guides/sound/index.html">Java Sound Technology</a>
+			</p>
+			
+			<p>
+				Pour l'utiliser il faut simplement commencer par l'instancier:
+				<code>Sound sound = new Sound("son.wav");</code>
+				Les methodes sont intuitives mais j'en fait la liste ici:
+		  		<ol>
+			    	<li>
+						Simplement jouer le son:<br/>
+						<code>sound.play();</code>
+					</li>
+					<li>
+						Mettre en pause:<br/>
+						<code>sound.pause()</code>
+					</li>
+					<li>
+						Relance la lecture après une pause:<br/>
+						<code>sound.restart() </code>
+					</li>
+					<li>
+						Stop la lecture:<br/>
+						<code>sound.stop()</code>
+					</li>
+					<li>
+						Déplace la lecture à la valeur en milliseconde indiqué:<br/>
+						<code>sound.jump(long time) </code>
+					</li>
+					<li>
+						Lit le son en boucle:<br/>
+						<code>sound.loop()</code>
+					</li>
+					<li>
+						Augmente le volume d'un cran:<br/>
+						<code>sound.upVolume()</code>
+					</li>
+					<li>
+						Baisse le volume d'un cran:<br/>
+						<code>sound.downVolume()</code>
+					</li>
+					<li>
+						Ajuste le volume à la valeur indiqué:<br/>
+						<code>sound.setVolume(double volume)</code>
+					</li>
+			    </ol>	
+			</p>
+		  
+		<h2 id="Listeners">LISTENERS:</h2>
+		  	<p>
+		  		Une liste de listeners à été ajouter pour cibler les besoins.<br/>
+		  		Ils permettent des interaction plus simple avec les peripheriques clavier et souris.<br/>
+		  		Liste des listeners:
+		  	</p>
+			<ol>
+		      <li>KeyPressedListener</li>
+		      <li>KeyReleasedListener</li>
+		      <li>KeyTypedListener</li>
+		      <li>MouseClickedListener</li>
+		      <li>MouseDraggedListener</li>
+		      <li>MouseEnteredListener</li>
+		      <li>MouseExitedListener</li>
+		      <li>MouseMovedListener</li>
+		      <li>MousePressedListener</li>
+		      <li>MouseReleasedListener</li>
+		      <li>MouseWheelMovedListener</li>
+		    </ol>
+		    <p>Il faut simplement implementer ces interfaces pour les utilisés, exemple:</p>
+			<code>public class Main implements PecEngine, MouseMovedListener{ }</code>
+			<p>Pensez à ajouter votre listener à la liste des listeners de votre frame, exemple:</p>
+			<code>@Override public void creation(Frame frame){ frame.addMouseMovedListener(this); }</code>
+			
+		<h2 id="Injector">INJECTOR:</h2>
+			<p>
+		  		Injector permet de faire facilement de l'injection de dependances.<br/>
+		  		Son utilisation ce passe en quatre étapes:
+		  		<ol>
+			    	<li>
+						La class à gérer doit implementer une interface quelconque:<br/>
+						<code>public class MaClass implements MonInterface{}</code>
+					</li>
+			    	<li>
+						Instancier un objet Injector, le fichier est créé automatiquement:<br/>
+						<code>Injector injector  = new Injector("fichier.txt");</code>
+					</li>
+					<li>
+						Dans le fichier, inscrire par ligne, le chemin d'une classe :<br/>
+						<code>MonPackage.MaClass</code>
+					</li>
+					<li>
+						Pour instencier MaClass, je fait:<br/>
+						<code>MonInterface monInterface = (MonInterface)injector.get("MonInterface");</code>
+					</li>
+			    </ol>
+		  	</p>
+		  	
+		  <h2 id="Files">FILES:</h2>
+		  	<p>Permet de lire et écrire dans un fichier:</p>
+			<ol>
+		    	<li>
+					Construit et retourne le chemin complet du fichier name si il se trouve dans le dossier courant:<br/>
+					<code>Files.loadPath(String name);</code>
+				</li>
+				<li>
+					Construit et retourne un implementation de File:<br/>
+					<code>Files.loadFile(String name);</code>
+				</li>
+		    	<li>
+					Construit et retourne un implementation de BufferedImage:<br/>
+					<code>Files.loadBufferedImage(String name);</code>
+				</li>
+				<li>
+					Construit et retourne un implementation de FileReader:<br/>
+					<code>Files.loadFileReader(String name);</code>
+				</li>
+				<li>
+					Construit et retourne un implementation de FileWriter:<br/>
+					<code>Files.loadFileWriter(String name);</code>
+				</li>
+				<li>
+					Construit et retourne un implementation de FileWriter:<br/>
+					<code>Files.loadFileWriter(String name, boolean b);</code>
+				</li>
+				<li>
+					Construit et retourne un implementation de BufferedReader:<br/>
+					<code>Files.loadBufferedReader(String name);</code>
+				</li>
+				<li>
+					Construit et retourne un implementation de BufferedWriter:<br/>
+					<code>Files.loadBufferedWriter(String name);</code>
+				</li>
+				<li>
+					Construit et retourne un implementation de BufferedWriter:<br/>
+					<code>Files.loadBufferedWriter(String name, boolean b);</code>
+				</li>
+				<li>
+					<br/>
+					<code>Files.loadScanner(String name);</code>
+				</li>
+		    </ol>		
+		    
+		<h2 id="Serializer">SERIALIZER:</h2>
+		  	<p>Permet de sérialiser et déserialiser des objets qui implementent l'interface Serializable:</p>
+			<ol>
+		    	<li>
+					Transforme un objet Serializable en tableau de byte<br/>
+					<code>Serializer.serialize(Serializable exchange);</code>
+				</li>
+				<li>
+					Transforme un tableau de byte en objet Serializable<br/>
+					<code>Serializer.deserialize(byte[] byteTab);</code>
+				</li>
+				<li>
+					Transforme un objet Serializable en String<br/>
+					<code>Serializer.serializeString(Serializable exchange);</code>
+				</li>
+				<li>
+					Transforme un String en objet Serializable<br/>
+					<code>Serializer.deserializeString(String byteTab);</code>
+				</li>
+		    </ol>
+		    
+		<h2 id="Saver">SAVER:</h2>
+		  	<p>Utilise Files et Serializer pour sauvgarder des objets dans un fichier:</p>
+		  	
+			<ol>
+		    	<li>
+					Dans un premier temps vous devez créé une instance de la classe Saver:<br />
+					<code>Saver saver = new Saver("file.txt");</code>
+				</li>
+				<li>
+					Sauvegarde un objet qui implemente l'inteface Serializable<br/>
+					<code>saver.save(Serializable save);</code>
+				</li>
+				<li>
+					<br/>
+					<code>saver.loadStrings();</code>
+				</li>
+				<li>
+					<br/>
+					<code>saver.close();</code>
+				</li>
+				<li>
+					<br/>
+					<code>saver.closeReader();</code>
+				</li>
+				<li>
+					<br/>
+					<code>saver.closeWriter();</code>
+				</li>
+		    </ol>
+	</body>
+</html>

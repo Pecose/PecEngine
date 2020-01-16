@@ -1,6 +1,7 @@
 package server;
 
 import java.io.Serializable;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 
 import waifUPNP.UPnP;
@@ -13,6 +14,12 @@ public class Server extends Thread{
 	
 	protected ServerManager getServerManager(){ return serverManager; }
 	public KeySet getKeySet(){ return keySet; }
+	public static String localhost() { 
+		try {
+			return InetAddress.getLocalHost().getHostAddress();
+		}catch(Exception e){e.printStackTrace(); } 
+		return null;
+	}
 	
 	public void sendTo(String login, Serializable message){
 		keySet.getConnection(login).send(message);

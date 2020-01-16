@@ -9,9 +9,11 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
+
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.EventListenerList;
+
 import listeners.KeyPressedListener;
 import listeners.KeyReleasedListener;
 import listeners.KeyTypedListener;
@@ -48,6 +50,9 @@ public class Panel extends JPanel{
 		super.addMouseListener(listeners);
 		super.addMouseMotionListener(listeners);
 		super.addMouseWheelListener(listeners);
+		super.addKeyListener(listeners);
+
+		this.setFocusable(true);
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override public void run(){ Panel.this.frame = new Frame(pecEngine, Panel.this); }

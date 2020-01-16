@@ -6,9 +6,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Scanner;
-
 import javax.imageio.ImageIO;
 
 @SuppressWarnings("serial")
@@ -27,12 +25,12 @@ public class Files extends File{
 		File file = new File(loadPath(name));
 		if(!file.exists()){ 
 			try{ file.createNewFile();
-			}catch(IOException e){ e.printStackTrace(); } 
+			}catch(Exception e){ e.printStackTrace(); } 
 		}
 		return file;
 	}
 	
-	public static BufferedImage loadImage(String name) {
+	public static BufferedImage loadBufferedImage(String name) {
 		try{
 			return ImageIO.read(loadFile(name));
 		}catch(Exception e){ e.printStackTrace(); }
