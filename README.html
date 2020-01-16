@@ -292,24 +292,20 @@
 					<code>Saver saver = new Saver("file.txt");</code>
 				</li>
 				<li>
-					Sauvegarde un objet qui implemente l'inteface Serializable<br/>
-					<code>saver.save(Serializable save);</code>
+					Sauvegarde par lignes dans un fichier, les élements d'une liste d'objets qui implemente l'inteface Serializable<br/>
+					<code>saver.save(List&lt;Serializable&gt; list);</code>
 				</li>
 				<li>
-					<br/>
+					Lit un fichier et retourne la liste des lignes qu'il contient sous forme d'objets de type Serializable<br/>
+					<code>saver.load();</code>
+				</li>
+				<li>
+					Sauvegarde par lignes dans un fichier, les élements d'une liste de String<br/>
+					<code>saver.saveStrings(List&lt;String&gt; list);</code>
+				</li>
+				<li>
+					Lit un fichier et retourne la liste des lignes qu'il contient<br/>
 					<code>saver.loadStrings();</code>
-				</li>
-				<li>
-					<br/>
-					<code>saver.close();</code>
-				</li>
-				<li>
-					<br/>
-					<code>saver.closeReader();</code>
-				</li>
-				<li>
-					<br/>
-					<code>saver.closeWriter();</code>
 				</li>
 		    </ol>
 	</body>

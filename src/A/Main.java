@@ -6,6 +6,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 
 import display.Frame;
@@ -31,7 +33,23 @@ public class Main implements PecEngine, KeyPressedListener, MouseMovedListener{
 	@Override
 	public void creation(Frame f) {
 		Saver saver = new Saver("aze.txt");
-		saver.saveXXX();
+		List<String> list = new ArrayList<String>();
+//		list.add("aze");
+//		list.add("qsd");
+//		list.add("wxc");
+//		list.add("rty");
+//		list.add("ghj");
+//		saver.saveStrings(list);
+		
+		list = saver.loadStrings();
+//		for(String s : list) {
+//			System.out.println(s);
+//		}
+		
+		list.set(3, "rrrrr");
+		saver.saveStrings(list);
+		
+		
 //		f.setSize(300, 300);
 		f.setDisplayOption(Panel.ADAPTABLE);
 		f.addMouseMovedListener(this);
