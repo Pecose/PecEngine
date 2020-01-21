@@ -9,6 +9,26 @@ public class Injector {
  
 	private Hashtable<String, Constructor<?>> classList = new Hashtable<String, Constructor<?>>();
 	
+	public Object construct(String name, Object p1){
+		return this.construct(name, new Object[] {p1});
+	}
+	
+	public Object construct(String name, Object p1, Object p2){
+		return this.construct(name, new Object[] {p1, p2});
+	}
+
+	public Object construct(String name, Object p1, Object p2, Object p3){
+		return this.construct(name, new Object[] {p1, p2, p3});
+	}
+	
+	public Object construct(String name, Object p1, Object p2, Object p3, Object p4){
+		return this.construct(name, new Object[] {p1, p2, p3, p4});
+	}
+	
+	public Object construct(String name, Object p1, Object p2, Object p3, Object p4, Object p5){
+		return this.construct(name, new Object[] {p1, p2, p3, p4, p5});
+	}
+	
 	public Object construct(String name, Object[] parameters){
 		for(Object p : parameters) {
 			name += " " +p.getClass().getSimpleName();
