@@ -17,6 +17,8 @@ import listeners.KeyPressedListener;
 import listeners.MouseMovedListener;
 import server.Client;
 import server.Server;
+import tools.Bbb;
+import tools.Injector;
 import tools.Saver;
 
 public class Main implements PecEngine, KeyPressedListener, MouseMovedListener{
@@ -32,23 +34,9 @@ public class Main implements PecEngine, KeyPressedListener, MouseMovedListener{
 
 	@Override
 	public void creation(Frame f) {
-		Saver saver = new Saver("aze.txt");
-		List<String> list = new ArrayList<String>();
-//		list.add("aze");
-//		list.add("qsd");
-//		list.add("wxc");
-//		list.add("rty");
-//		list.add("ghj");
-//		saver.saveStrings(list);
-		
-		list = saver.loadStrings();
-//		for(String s : list) {
-//			System.out.println(s);
-//		}
-		
-		list.set(3, "rrrrr");
-		saver.saveStrings(list);
-		
+		Injector injector = new Injector("aze.txt");
+		Bbb b = (Bbb)injector.construct("Aaa", new Object[] {6});
+		System.out.println(b.getI());
 		
 //		f.setSize(300, 300);
 		f.setDisplayOption(Panel.ADAPTABLE);
