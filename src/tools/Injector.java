@@ -9,6 +9,10 @@ public class Injector {
  
 	private Hashtable<String, Constructor<?>> classList = new Hashtable<String, Constructor<?>>();
 	
+	public Object construct(String name){
+		return this.construct(name, new Object[] {});
+	}
+	
 	public Object construct(String name, Object p1){
 		return this.construct(name, new Object[] {p1});
 	}
@@ -33,7 +37,6 @@ public class Injector {
 		for(Object p : parameters) {
 			name += " " +p.getClass().getSimpleName();
 		}
-		System.out.println("["+name+"]");
 		try {
 			return classList.get(name).newInstance(parameters);
 		} catch (Exception e) { e.printStackTrace(); }
@@ -42,9 +45,8 @@ public class Injector {
  
 	public Injector(String configFileName){
 		try {
-			Scanner scanner = Files.loadScanner(configFileName);
-			ArrayList<String> namesList = new ArrayList<String>();
-			while(scanner.hasNext()){ namesList.add(scanner.next()); }
+			ArrayList<String> namesList = this.loadNameList(configFileName);
+			
 			for(String string : namesList){ 
 				Class<?> klass = Class.forName(string);
 				String[] interfaces = new String[klass.getInterfaces().length];
@@ -63,48 +65,62 @@ public class Injector {
 					Class<?>[] parameters = c.getParameterTypes();
 					
 					for(Class<?> p : parameters) {
-						String className = p.getSimpleName();
-						if(className.equals("int")){
-							className = "Integer";
-						}else if(className.equals("int[]")){
-							className = "Integer[]";
-						}else if(className.equals("char")){
-							className = "Character";
-						}else if(className.equals("char[]")){
-							className = "Character[]";
-						}else if(className.equals("float")){
-							className = "Float";
-						}else if(className.equals("float[]")){
-							className = "Float[]";
-						}else if(className.equals("double")){
-							className = "Double";
-						}else if(className.equals("double[]")){
-							className = "Double[]";
-						}else if(className.equals("long")){
-							className = "Long";
-						}else if(className.equals("long[]")){
-							className = "Long[]";
-						}else if(className.equals("boolean")){
-							className = "Boolean";
-						}else if(className.equals("boolean[]")){
-							className = "Boolean[]";
-						}else if(className.equals("byte")){
-							className = "Byte";
-						}else if(className.equals("byte[]")){
-							className = "Byte[]";
-						}else if(className.equals("short")){
-							className = "Short";
-						}else if(className.equals("short[]")){
-							className = "Short[]";
-						}
+						String className = this.switchType(p.getSimpleName());
 						name += " " +className;
-
 					}
-					System.out.println("#"+name+"#");
 					classList.put(name, c);	
 				}
 			}
 		} catch(Exception e) { e.printStackTrace(); }
+	}
+	
+	private String switchType(String className){
+		if(className.equals("int")){
+			className = "Integer";
+		}else if(className.equals("int[]")){
+			className = "Integer[]";
+		}else if(className.equals("char")){
+			className = "Character";
+		}else if(className.equals("char[]")){
+			className = "Character[]";
+		}else if(className.equals("float")){
+			className = "Float";
+		}else if(className.equals("float[]")){
+			className = "Float[]";
+		}else if(className.equals("double")){
+			className = "Double";
+		}else if(className.equals("double[]")){
+			className = "Double[]";
+		}else if(className.equals("long")){
+			className = "Long";
+		}else if(className.equals("long[]")){
+			className = "Long[]";
+		}else if(className.equals("boolean")){
+			className = "Boolean";
+		}else if(className.equals("boolean[]")){
+			className = "Boolean[]";
+		}else if(className.equals("byte")){
+			className = "Byte";
+		}else if(className.equals("byte[]")){
+			className = "Byte[]";
+		}else if(className.equals("short")){
+			className = "Short";
+		}else if(className.equals("short[]")){
+			className = "Short[]";
+		}
+		return className;
+	}
+	
+	private ArrayList<String> loadNameList(String configFileName){
+		Scanner scanner = Files.loadScanner(configFileName);
+		ArrayList<String> namesList = new ArrayList<String>();
+		while(scanner.hasNext()){ 
+			String[] line = scanner.next().split(" ");
+			for(String word : line){
+				namesList.add(word); 
+			}
+		}
+		return namesList;
 	}
  
 }

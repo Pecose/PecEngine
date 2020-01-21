@@ -34,8 +34,10 @@ public class Main implements PecEngine, KeyPressedListener, MouseMovedListener{
 	@Override
 	public void creation(Frame f) {
 		Injector injector = new Injector("aze.txt");
-		Bbb b = (Bbb)injector.construct("Aaa", new Object[] {6});
+		Bbb b = (Bbb)injector.construct("Aaa", 6);
+		Xxx w = (Xxx)injector.construct("Ccc");
 		System.out.println(b.getI());
+		System.out.println(w.getX());
 		
 //		f.setSize(300, 300);
 		f.setDisplayOption(Panel.ADAPTABLE);

@@ -1,6 +1,6 @@
 package A;
 
-public class Aaa implements Bbb, Xxx{
+public class Aaa implements Bbb{
 	public int i = 0;
 	public Aaa() {
 		this.i = 1;
