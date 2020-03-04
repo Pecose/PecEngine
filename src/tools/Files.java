@@ -9,7 +9,6 @@ import java.io.FileWriter;
 import java.util.Scanner;
 import javax.imageio.ImageIO;
 
-@SuppressWarnings("serial")
 public class Files extends File{
 	
 	public static final boolean REWRITE = false;
