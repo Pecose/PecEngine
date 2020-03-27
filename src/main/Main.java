@@ -3,18 +3,16 @@ package main;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.util.Map.Entry;
 
 import display.Frame;
 import display.Panel;
 import display.PecEngine;
 import listeners.MouseMovedListener;
 import shadows.Light;
-import shadows.Twilight;
+import shadows.Use;
 import shadows.Wall;
-import shadows.Walls;
+import shadows.World;
 import tools.Files;
 
 public class Main implements PecEngine, MouseMovedListener{
@@ -22,7 +20,6 @@ public class Main implements PecEngine, MouseMovedListener{
 	
 	BufferedImage foret = Files.loadBufferedImage("foret.jpg");
 	
-	Point2D mouse = new Point2D.Double(0,0);
 	@Override
 	public void creation(Frame f) {
 		f.setSize(900, 500);
@@ -31,30 +28,38 @@ public class Main implements PecEngine, MouseMovedListener{
 	
 	@Override
 	public void display(Panel p, Graphics2D g) {
-		g.drawImage(foret, null, 0, 0);
+//		g.drawImage(foret, null, 0, 0);
 		
-		Twilight twilight = new Twilight();
+		World world = new World(g);
 		
-		twilight.addWall("wall1", new Wall(100, 100, 300, 10));
-		twilight.addWall("wall2", new Wall(100, 110, 10, 100));
+		world.setTwilight(100);
 		
-		twilight.addLight("fixLight", new Light(550, 550, 600, 0f, Color.red));
-		twilight.addLight("mouseLight", new Light(mouse.getX(), mouse.getY(), 600, 0.5f, Color.green));
+		world.addWall("wall1", new Wall(100, 100, 300, 10));
+		world.addWall("wall2", new Wall(100, 110, 10, 100));
+		world.addWall("wall3", new Wall(500, 500, 10, 10));
 		
-		twilight.displayLights();
+		Wall wall4 = new Wall();
+		wall4.addPoint(763, 446);
+//		wall4.addPoint(843, 628);
+		wall4.addPoint(725, 508);
+		wall4.addPoint(753, 416);
+		wall4.addPoint(853, 428);
+		wall4.addPoint(858, 475);
+		
+		world.addWall("wall4", wall4);
+		
+//		world.addLight("fixLight2", new Light(100, 100, 600, 0.1f, Color.blue));
+//		world.addLight("fixLight", new Light(550, 550, 600, 0.1f, Color.red));
+		world.addLight("mouseLight", new Light(Use.mouse.getX(), Use.mouse.getY(), 600, 0.5f, Color.green));
+		
+		world.displayLights();
 
-		for(Entry<String, Wall> wall : twilight.getWallsSet()){
-			g.setColor(Color.GREEN);
-			g.fill(wall.getValue());
-		}
-		
-		g.setColor(Color.green);
-		g.drawImage(twilight, null, 0, 0);
 	}
 	
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		mouse.setLocation(e.getX(), e.getY());
+		Use.mouse.setLocation(e.getX(), e.getY());
+//		System.out.println(e.getX()+ " " +e.getY());
 	}
 
 }
