@@ -2,20 +2,22 @@ package main;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 import display.Frame;
 import display.Panel;
 import display.PecEngine;
+import environment.Use;
+import listeners.KeyPressedListener;
 import listeners.MouseMovedListener;
 import shadows.Light;
-import shadows.Use;
 import shadows.Wall;
 import shadows.World;
 import tools.Files;
 
-public class Main implements PecEngine, MouseMovedListener{
+public class Main implements PecEngine, MouseMovedListener, KeyPressedListener{
 	public static void main(String[] args) { PecEngine.start(new Main()); }
 	
 	BufferedImage foret = Files.loadBufferedImage("foret.jpg");
@@ -24,6 +26,7 @@ public class Main implements PecEngine, MouseMovedListener{
 	public void creation(Frame f) {
 		f.setSize(900, 500);
 		f.addMouseMovedListener(this);
+		f.addKeyPressedListener(this);
 	}
 	
 	@Override
@@ -60,6 +63,12 @@ public class Main implements PecEngine, MouseMovedListener{
 	public void mouseMoved(MouseEvent e) {
 		Use.mouse.setLocation(e.getX(), e.getY());
 //		System.out.println(e.getX()+ " " +e.getY());
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		System.out.println(e.getKeyChar()+" "+e.getKeyCode()+" "+e.getExtendedKeyCode());
+		
 	}
 
 }

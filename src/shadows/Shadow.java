@@ -1,6 +1,9 @@
 package shadows;
 
-public class Shadow extends Polygon2{
+import geometry.Polygon;
+import geometry.Vertice;
+
+public class Shadow extends Polygon{
 	public void addPoint(double x, double y) {
 		super.addPoint((int)x, (int)y);
 	}

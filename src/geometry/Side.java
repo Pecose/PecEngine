@@ -1,4 +1,4 @@
-package shadows;
+package geometry;
 
 import java.awt.geom.Line2D;
 

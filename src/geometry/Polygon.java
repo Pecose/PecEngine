@@ -1,9 +1,10 @@
-package shadows;
+package geometry;
 
-import java.awt.Polygon;
 import java.util.ArrayList;
 
-public class Polygon2 extends Polygon{
+import shadows.Wall;
+
+public class Polygon extends java.awt.Polygon{
 	
 	public ArrayList<Vertice> getVertices() {
 		 return Wall.getVertices(this);
@@ -46,29 +47,29 @@ public class Polygon2 extends Polygon{
 		return this.npoints;
 	}
 	
-//	public double perimeter() {
-//        double perimeter = 0;
-//        for (int i = 0; i < sommets.size(); i++)
-//            longueur += getSommet(i).distance(getSommet(i + 1));
-//        return longueur;
-//    }
-//
-//    public double area() {
-//        double aire = 0;
-//        for (int i = 0; i < sommets.size(); i++)
-//            aire += getSommet(i).x * getSommet(i + 1).y - getSommet(i + 1).x * getSommet(i).y;
-//        return aire * 0.5;
-//    }
-//
-//    public Point2D barycenter() {
-//        double x = 0, y = 0;
-//        final double k = 1 / (6 * aire());
-//        for (int i = 0; i < sommets.size(); i++) {
-//            double element = getSommet(i).x * getSommet(i + 1).y - getSommet(i + 1).x * getSommet(i).y;
-//            x += ((getSommet(i).x + getSommet(i + 1).x) * element);
-//            y += ((getSommet(i).y + getSommet(i + 1).y) * element);
-//        }
-//        return new Point(k * x, k * y);
-//    }
+	public double perimeter() {
+        double perimeter = 0;
+        for (int i = 0; i < this.npoints; i++)
+        	perimeter += this.get(i).distance(this.get(i + 1));
+        return perimeter;
+    }
+
+    public double area() {
+        double area = 0;
+        for (int i = 0; i < this.npoints; i++)
+        	area += this.get(i).x * this.get(i + 1).y - this.get(i + 1).x * this.get(i).y;
+        return area * 0.5;
+    }
+
+    public Location barycenter() {
+        double x = 0, y = 0;
+        final double k = 1 / (6 * this.area());
+        for (int i = 0; i < this.npoints; i++) {
+            double element = this.get(i).x * this.get(i + 1).y - this.get(i + 1).x * this.get(i).y;
+            x += ((this.get(i).x + this.get(i + 1).x) * element);
+            y += ((this.get(i).y + this.get(i + 1).y) * element);
+        }
+        return new Location(k * x, k * y);
+    }
 
 }

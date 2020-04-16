@@ -2,6 +2,7 @@ package shadows;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
@@ -12,6 +13,9 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import display.Screen;
+import geometry.Polygon;
+import geometry.Side;
+import geometry.Vertice;
 
 public class World extends BufferedImage{
 	
@@ -46,6 +50,7 @@ public class World extends BufferedImage{
 		this.graphicsTarget = graphicsTarget;
 		this.graphics = this.createGraphics();
 		this.graphics.setComposite(BlendComposite.Add);
+		this.graphics.setRenderingHints(new RenderingHints( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON));
 	}
 
 	public void displayLights() {
@@ -69,8 +74,8 @@ public class World extends BufferedImage{
 		for(Wall wall : walls.values()){
 			area.subtract(this.addShadow(light, wall));
 		}
-		this.graphics.fill(area);
 		
+		this.graphics.fill(area);
 	}
 	
 	public void reverseAlpha() {
@@ -86,13 +91,13 @@ public class World extends BufferedImage{
 		Area area = new Area();
 		
 		//Liste des ombres portées des coins visibles
-		Polygon2 dropShadows = this.getDropShadows(light, wall);
+		Polygon dropShadows = this.getDropShadows(light, wall);
 		
-		ArrayList<Side> shadowsSides = Polygon2.getSides(dropShadows);
-		ArrayList<Side> visibleSides = Polygon2.getSides(wall);
+		ArrayList<Side> shadowsSides = Polygon.getSides(dropShadows);
+		ArrayList<Side> visibleSides = Polygon.getSides(wall);
 
 		for(int i = 0; i < dropShadows.size(); i++){
-			Polygon2 polygon = new Polygon2();
+			Polygon polygon = new Polygon();
 			
 			Vertice p1 = shadowsSides.get(i).getP1();
 			Vertice p2 = shadowsSides.get(i).getP2();
@@ -118,11 +123,11 @@ public class World extends BufferedImage{
 	}
 	
 	//retourne les projections des coins passer en paramètre
-	private Polygon2 getDropShadows(Light light, Polygon2 visibleVertices) {
+	private Polygon getDropShadows(Light light, Polygon visibleVertices) {
 		//liste des distances entre la source lumineuse et les coins du mur
 		ArrayList<Double> cornerDistances = this.getCornerDistances(light, visibleVertices);
 				
-		Polygon2 dropShadow = new Polygon2();
+		Polygon dropShadow = new Polygon();
 		for(int i = 0; i < visibleVertices.size(); i++){
 			dropShadow.add(this.getDropShadow(light, visibleVertices.get(i), cornerDistances.get(i)));
 		}
@@ -146,7 +151,7 @@ public class World extends BufferedImage{
 	}
 	
 	//retourne la liste des distances entre la source lumineuse et les coins du mur
-	private ArrayList<Double> getCornerDistances(Light light, Polygon2 visibleVertices) {
+	private ArrayList<Double> getCornerDistances(Light light, Polygon visibleVertices) {
 		ArrayList<Double> cornerDistances = new ArrayList<Double>();
 		
 		for(Point2D vertice : visibleVertices.getVertices()){

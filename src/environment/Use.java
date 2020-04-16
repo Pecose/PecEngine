@@ -1,4 +1,4 @@
-package shadows;
+package environment;
 
 import java.awt.geom.Point2D;
 

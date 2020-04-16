@@ -1,2 +1,12 @@
-/shadows/
+/display/
+/environment/
+/geometry/
+/image/
+/listeners/
 /main/
+/server/
+/shadows/
+/shapes/
+/sound/
+/tools/
+/waifUPNP/
