@@ -37,7 +37,7 @@ public class Serializer {
 	        output.writeObject( exchange );
 	        output.close();
 	        return Base64.getEncoder().encodeToString(outputStream.toByteArray()); 
-		}catch (Exception e) { System.err.println("[Serializer.deserialize] " + e.getMessage()); }
+		}catch (Exception e) { System.err.println("[Serializer.serialize] " + e.getMessage()); }
 		return null;
 	}
 	
@@ -48,7 +48,7 @@ public class Serializer {
 		    Serializable exchange = (Serializable) input.readObject();
 		    input.close();
 		    return exchange;
-		}catch (Exception e) { System.err.println("[Serializer.deserialize] " + e.getMessage()); }
+		}catch (Exception e) { System.err.println("[Serializer.serialize] " + e.getMessage()); }
 		return null;
 	}
 }
