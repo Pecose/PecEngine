@@ -14,8 +14,10 @@ public class Server extends Thread{
 	
 	public HashMap<String, ServerConnexion> getConnections(){ return this.connexions; }
 	public Serializable getRemoteObject(String s){ return this.remoteObjects.get(s); }
-	public Serializable addRemoteObject(String name, Serializable target) {
-		return this.remoteObjects.put(name, target);
+	public void addRemoteObject(String name, Serializable target) {
+		if(!this.remoteObjects.containsKey(name)) {
+			this.remoteObjects.put(name, target);
+		}
 	}
 	
 	public int getPort() { return this.port; }
