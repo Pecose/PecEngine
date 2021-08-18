@@ -16,10 +16,6 @@ public class ServerConnexion extends Thread{
 	protected DataInputStream getDataInputStream() { return stream.getDataInputStream(); }
 	protected DataOutputStream getDataOutputStream() { return stream.getDataOutputStream(); }
 	
-	public String getNameForRemoteObject(Serializable target) { 
-		return this.stream.getIPAddress()+" "+target.getClass().getName(); 
-	}
-
 	protected ServerConnexion(Socket socket, Server server) throws IOException{
 		this.server = server;
 		this.stream = new Stream(socket);
@@ -32,9 +28,7 @@ public class ServerConnexion extends Thread{
 				Serializable serial = stream.read();
 				if(serial instanceof NewInstance) {
 					NewInstance pack = (NewInstance) serial;
-					String name = this.getNameForRemoteObject(pack.getTarget());
-					this.server.addRemoteObject(name, pack.getTarget());
-					this.stream.write(name);
+					this.server.addRemoteObject(pack.getName(), pack.getTarget());
 				}else 
 				if(serial instanceof MethodCall) {
 					MethodCall pack = (MethodCall) serial;
