@@ -23,11 +23,10 @@ public class Client{
 		} catch (IOException e) { System.err.println("[Client] " + e.getMessage()); }
 	}
 	
-	public Serializable getRemote(Serializable target) {
+	public Serializable getRemote(Serializable target, String name) {
 		try {
-			NewInstance newInstance = new NewInstance(target);
+			NewInstance newInstance = new NewInstance(target, name);
 			this.connexion.getStream().write(newInstance);
-			String name = this.connexion.getStream().readString();
 			Class<?>[] c = target.getClass().getInterfaces();
 			return (Serializable) Proxy.newProxyInstance(c[0].getClassLoader(), c, new LoggingHandler(name, connexion));
 		} catch (IOException e) { System.err.println("[Client getRemote] " + e.getMessage()); }
